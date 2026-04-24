@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزان سولار - Solar Balance </title>
+    <title>ميزان سولار - Solar Balance Elite</title>
     <style>
         :root {
             --glow-cyan: #4facfe;
@@ -23,8 +23,9 @@
         .animated-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('bg.jpd') center/cover no-repeat;
-            z-index: -2;
+            z-index: -2; animation: spaceMove 40s linear infinite alternate;
         }
+        @keyframes spaceMove { from { transform: scale(1.1); } to { transform: scale(1.2) translate(-10px, -10px); } }
 
         #wasted-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -32,7 +33,6 @@
         }
         #wasted-screen h1 { font-size: 8rem; color: #ff0000; text-shadow: 0 0 20px #600; letter-spacing: 15px; transform: skewX(-10deg); }
 
-        /* اللوحات المنبثقة */
         .overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 4000;
@@ -40,15 +40,14 @@
         }
         .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; }
 
-        /* الأزرار العلوية - تم ضبط الارتفاع ليكون مثالي */
-        .controls-top { 
-            position: absolute; top: 30px; right: 20px; 
-            display: flex; gap: 10px; z-index: 1000; 
-        }
+        /* الأزرار العلوية */
+        .controls-top { position: absolute; top: 30px; right: 20px; display: flex; gap: 10px; z-index: 1000; }
+        .controls-left { position: absolute; top: 30px; left: 20px; z-index: 1000; }
+        
         .btn-ctrl { 
             background: rgba(0,0,0,0.6); border: 1.5px solid rgba(255,255,255,0.4); 
             color: white; padding: 8px 15px; border-radius: 10px; 
-            cursor: pointer; transition: 0.3s; font-weight: bold; font-size: 0.9rem;
+            cursor: pointer; transition: 0.3s; font-weight: bold;
         }
         .btn-ctrl:hover { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
 
@@ -74,7 +73,7 @@
         .logo-box { width: 60px; height: 60px; border: 2px solid #fff; border-radius: 12px; background: url('logo.png') center/cover no-repeat; }
         .logo-text { font-size: 2.8rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
-        /* منطقة الميزان المرفوعة والمتزنة */
+        /* منطقة الميزان */
         .balance-area { height: 260px; position: relative; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 30px; }
         .beam { width: 440px; height: 6px; background: #fff; position: absolute; bottom: 150px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
         .basket-anchor { position: absolute; top: 0; display: flex; flex-direction: column; align-items: center; transition: transform 0.7s; }
@@ -82,20 +81,20 @@
         .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1.5px; height: 105px; background: rgba(255,255,255,0.4); }
         .strings::before { left: 8px; transform: rotate(-30deg); transform-origin: top; }
         .strings::after { right: 8px; transform: rotate(30deg); transform-origin: top; }
-        .cup { width: 110px; height: 50px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.4); border-radius: 0 0 60px 60px; display: flex; justify-content: center; align-items: center; }
+        .cup { width: 110px; height: 50px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 60px 60px; display: flex; justify-content: center; align-items: center; }
         .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 10px; border-radius: 5px; font-size: 1.6rem; font-weight: bold; }
         .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 150px solid rgba(255,255,255,0.1); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
-        /* الأزرار وتأثيرات التحديد */
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; position: relative; z-index: 10; }
         .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .num-btn:hover:not(:disabled) { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); transform: scale(1.05); }
-        .num-btn:active { transform: scale(0.9); }
+        .num-btn:hover:not(:disabled) { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); transform: scale(1.05); background: rgba(0, 242, 254, 0.1); }
         .num-btn:disabled { opacity: 0.1; border-color: red; }
 
         .timer-danger { color: #ff0000 !important; animation: blink 0.5s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
         #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); border: 2px solid var(--neon-blue); padding: 10px 30px; border-radius: 50px; z-index: 5000; font-weight: bold; }
+        
+        .credits-list p { margin: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -104,11 +103,23 @@
     <div class="animated-bg"></div>
     <div id="event-msg">حدث فجائي!</div>
 
+    <div class="overlay" id="credits-box">
+        <div class="content-box">
+            <h2 style="color:var(--glow-cyan); margin-top:0;">💎 طاقم العمل</h2>
+            <div class="credits-list">
+                <p>👨‍💻 <b>المبرمجين:</b> Leba , AAA</p>
+                <p>🎨 <b>المصمم:</b> mesh</p>
+                <p>⚔️ <b>تطوير كلان:</b> العشرينات</p>
+            </div>
+            <button class="btn-ctrl" onclick="toggleOverlay('credits-box')" style="width:100%; margin-top:15px; background:var(--galaxy); border:none;">إغلاق</button>
+        </div>
+    </div>
+
     <div class="overlay" id="rules-box">
         <div class="content-box">
             <h2>📜 شروط اللعبة</h2>
             <p>1. ممنوع تكرار نفس الرقم مرتين متتاليتين لنفس الفريق.</p>
-            <p>2. عند انتهاء الوقت، تخسر الجولة فوراً.</p>
+            <p>2. خسارة الجولة فور انتهاء الوقت.</p>
             <button class="btn-ctrl" onclick="toggleOverlay('rules-box')" style="width:100%; background:var(--danger); border:none;">موافق</button>
         </div>
     </div>
@@ -120,6 +131,10 @@
             <p>☄️ النيازك: تزيد المجموع.</p>
             <button class="btn-ctrl" onclick="toggleOverlay('info-box')" style="width:100%; background:var(--glow-cyan); border:none;">فهمت</button>
         </div>
+    </div>
+
+    <div class="controls-left">
+        <button class="btn-ctrl" onclick="toggleOverlay('credits-box')">ℹ️</button>
     </div>
 
     <div class="controls-top">
@@ -236,9 +251,8 @@
 
         function triggerEvent() {
             const r = Math.floor(Math.random()*2);
-            let msg = "";
-            if(r === 0) { total = Math.max(0, total - mV); msg = `🕳️ ثقب: -${mV}`; }
-            else { total += pV; msg = `☄️ نيزك: +${pV}`; }
+            let msg = r === 0 ? `🕳️ ثقب: -${mV}` : `☄️ نيازك: +${pV}`;
+            if(r === 0) total = Math.max(0, total - mV); else total += pV;
             const m = document.getElementById('event-msg'); m.innerText = msg; m.style.display = 'block';
             updateUI(); setTimeout(() => m.style.display = 'none', 3000);
         }
@@ -246,17 +260,13 @@
         function updateUI() {
             document.getElementById('total-val').innerText = total;
             document.getElementById('s1').innerText = t1; document.getElementById('s2').innerText = t2;
-            
             const card = document.getElementById('game-card');
             const timerEl = document.getElementById('timer');
             if(dangerOn && max - total <= dangerLimit && max !== 0) {
-                card.classList.add('danger-zone');
-                timerEl.classList.add('timer-danger');
+                card.classList.add('danger-zone'); timerEl.classList.add('timer-danger');
             } else {
-                card.classList.remove('danger-zone');
-                timerEl.classList.remove('timer-danger');
+                card.classList.remove('danger-zone'); timerEl.classList.remove('timer-danger');
             }
-
             let angle = Math.max(-25, Math.min(25, (t1 - t2) * -1.8));
             document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
             document.getElementById('cont1').style.transform = `rotate(${-angle}deg)`;
@@ -271,9 +281,7 @@
             setTimeout(() => location.reload(), 3000); 
         }
 
-        function reset() { 
-            total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null; timeLeft = timeLimit; updateUI(); updateBtns(null); 
-        }
+        function reset() { total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null; timeLeft = timeLimit; updateUI(); updateBtns(null); }
     </script>
 </body>
 </html>
