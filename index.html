@@ -20,6 +20,7 @@
             position: relative;
         }
 
+        /* الخلفية المتحركة */
         .animated-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('bg.jpd') center/cover no-repeat;
@@ -30,12 +31,14 @@
             to { transform: scale(1.2) translate(-10px, -10px); }
         }
 
+        /* شاشة WASTED */
         #wasted-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center;
         }
         #wasted-screen h1 { font-size: 8rem; color: #ff0000; text-shadow: 0 0 20px #600; letter-spacing: 15px; transform: skewX(-10deg); }
 
+        /* اللوحات المنبثقة */
         .overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 4000;
@@ -43,10 +46,26 @@
         }
         .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; }
 
+        /* تعديل مكان الأزرار العلوية لتكون واضحة */
+        .controls-top { 
+            position: absolute; 
+            top: 60px; /* نزلناها تحت عشان ما تروح تحت المتصفح */
+            right: 20px; 
+            display: flex; gap: 10px; z-index: 1000; 
+            align-items: center;
+        }
+        .btn-ctrl { 
+            background: rgba(0,0,0,0.6); border: 1.5px solid rgba(255,255,255,0.4); 
+            color: white; padding: 10px 18px; border-radius: 10px; 
+            cursor: pointer; transition: 0.3s; font-weight: bold;
+        }
+        .btn-ctrl:hover { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); background: rgba(255,255,255,0.1); }
+
+        /* لوحة الإعدادات */
         .admin-panel {
-            position: absolute; top: 80px; right: 20px; background: rgba(0,0,0,0.95);
+            position: absolute; top: 115px; right: 20px; background: rgba(0,0,0,0.95);
             padding: 20px; border-radius: 15px; border: 1px solid var(--neon-blue);
-            z-index: 1001; width: 280px; max-height: 80vh; overflow-y: auto; transition: 0.3s;
+            z-index: 1001; width: 280px; max-height: 75vh; overflow-y: auto; transition: 0.3s;
         }
         .admin-panel.hidden { transform: translateX(400px); opacity: 0; pointer-events: none; }
         .admin-panel label { font-size: 0.75rem; color: var(--neon-blue); display: block; margin-top: 8px; }
@@ -65,18 +84,17 @@
         .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
         /* الميزان المرفوع */
-        .balance-area { height: 240px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 40px; position: relative; }
-        .beam { width: 460px; height: 6px; background: #fff; position: absolute; bottom: 130px; left: 50%; margin-left: -230px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
-        .basket-container { position: absolute; top: 0; transition: transform 0.7s; }
+        .balance-area { height: 260px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 50px; position: relative; }
+        .beam { width: 460px; height: 6px; background: #fff; position: absolute; bottom: 150px; left: 50%; margin-left: -230px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
         .strings { width: 110px; height: 110px; position: relative; }
         .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1px; height: 115px; background: rgba(255,255,255,0.4); }
         .strings::before { left: 10px; transform: rotate(-35deg); transform-origin: top; }
         .strings::after { right: 10px; transform: rotate(35deg); transform-origin: top; }
         .cup { width: 120px; height: 50px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 60px 60px; display: flex; justify-content: center; align-items: center; }
         .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 10px; border-radius: 5px; font-size: 1.6rem; font-weight: bold; }
-        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 130px solid rgba(255,255,255,0.15); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
+        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 150px solid rgba(255,255,255,0.15); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
-        /* الأزرار مع تأثير الـ Hover الجديد */
+        /* الأرقام مع تأثير التحديد */
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
         .num-btn { 
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); 
@@ -92,19 +110,6 @@
         .num-btn:active { transform: scale(0.9); }
         .num-btn:disabled { opacity: 0.1; border-color: red; cursor: not-allowed; }
 
-        /* أزرار التحكم العلوية الثابتة */
-        .controls-top { 
-            position: absolute; top: 20px; right: 20px; 
-            display: flex; gap: 10px; z-index: 1000; 
-            align-items: center;
-        }
-        .btn-ctrl { 
-            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.5); 
-            color: white; padding: 8px 15px; border-radius: 8px; 
-            cursor: pointer; transition: 0.3s;
-        }
-        .btn-ctrl:hover { border-color: var(--neon-blue); background: rgba(255,255,255,0.1); }
-
         .turn-indicator { margin-top: 15px; font-size: 1.4rem; font-weight: bold; color: var(--neon-blue); }
         #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); border: 2px solid var(--neon-blue); padding: 10px 30px; border-radius: 50px; z-index: 5000; font-weight: bold; }
     </style>
@@ -118,8 +123,8 @@
     <div class="overlay" id="rules-box">
         <div class="content-box">
             <h2>📜 شروط اللعبة</h2>
-            <p>1. ممنوع اختيار نفس الرقم مرتين متتاليتين.</p>
-            <p>2. خسارة الجولة فور انتهاء الوقت.</p>
+            <p>1. ممنوع اختيار نفس الرقم مرتين متتاليتين لنفس الفريق.</p>
+            <p>2. خسارة الجولة وظهور شاشة WASTED عند انتهاء الوقت.</p>
             <button onclick="toggleOverlay('rules-box')" style="width:100%; padding:10px; background:var(--danger); border:none; color:white; border-radius:8px; cursor:pointer;">موافق</button>
         </div>
     </div>
@@ -129,14 +134,14 @@
             <h2>ℹ️ شرح الأحداث</h2>
             <p>🕳️ الثقب الأسود: يخصم من المجموع.</p>
             <p>☄️ النيازك: تزيد المجموع.</p>
-            <p>🔋 شحن طاقة: تزيد وقت الجولة.</p>
+            <p>🔋 شحن طاقة: تزيد الوقت المتبقي.</p>
             <button onclick="toggleOverlay('info-box')" style="width:100%; padding:10px; background:var(--glow-cyan); border:none; color:white; border-radius:8px; cursor:pointer;">فهمت</button>
         </div>
     </div>
 
     <div class="controls-top">
-        <button class="btn-ctrl" onclick="toggleOverlay('rules-box')">📜 الشروط</button>
-        <button class="btn-ctrl" onclick="toggleOverlay('info-box')">ℹ️ الأحداث</button>
+        <button class="btn-ctrl" onclick="toggleOverlay('rules-box')">الشروط</button>
+        <button class="btn-ctrl" onclick="toggleOverlay('info-box')">الأحداث</button>
         <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none; font-weight:bold;">ابدأ ▶️</button>
         <button class="btn-ctrl" onclick="toggleAdmin()">⚙️</button>
     </div>
@@ -275,7 +280,8 @@
             document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
             document.getElementById('cont1').style.transform = `rotate(${-angle}deg)`;
             document.getElementById('cont2').style.transform = `rotate(${-angle}deg)`;
-            document.getElementById('turn-txt').innerText = isPaused ? "متوقف" : `دور: ${turn === 1 ? document.getElementById('t1-n').innerText : document.getElementById('t2-n').innerText}`;
+            const name = turn === 1 ? document.getElementById('t1-n').innerText : document.getElementById('t2-n').innerText;
+            document.getElementById('turn-txt').innerText = isPaused ? "متوقف" : `دور: ${name}`;
         }
 
         function endGame() {
