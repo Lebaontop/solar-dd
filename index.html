@@ -20,25 +20,19 @@
             position: relative;
         }
 
-        /* الخلفية المتحركة */
         .animated-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('bg.jpd') center/cover no-repeat;
             z-index: -2; animation: spaceMove 40s linear infinite alternate;
         }
-        @keyframes spaceMove {
-            from { transform: scale(1.1); }
-            to { transform: scale(1.2) translate(-10px, -10px); }
-        }
+        @keyframes spaceMove { from { transform: scale(1.1); } to { transform: scale(1.2); } }
 
-        /* شاشة WASTED */
         #wasted-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center;
         }
         #wasted-screen h1 { font-size: 8rem; color: #ff0000; text-shadow: 0 0 20px #600; letter-spacing: 15px; transform: skewX(-10deg); }
 
-        /* اللوحات المنبثقة */
         .overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 4000;
@@ -46,72 +40,60 @@
         }
         .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; }
 
-        /* تعديل مكان الأزرار العلوية لتكون واضحة */
-        .controls-top { 
-            position: absolute; 
-            top: 60px; /* نزلناها تحت عشان ما تروح تحت المتصفح */
-            right: 20px; 
-            display: flex; gap: 10px; z-index: 1000; 
-            align-items: center;
-        }
-        .btn-ctrl { 
-            background: rgba(0,0,0,0.6); border: 1.5px solid rgba(255,255,255,0.4); 
-            color: white; padding: 10px 18px; border-radius: 10px; 
-            cursor: pointer; transition: 0.3s; font-weight: bold;
-        }
-        .btn-ctrl:hover { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); background: rgba(255,255,255,0.1); }
+        /* الأزرار العلوية */
+        .controls-top { position: absolute; top: 60px; right: 20px; display: flex; gap: 10px; z-index: 1000; }
+        .btn-ctrl { background: rgba(0,0,0,0.6); border: 1px solid white; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
 
-        /* لوحة الإعدادات */
         .admin-panel {
-            position: absolute; top: 115px; right: 20px; background: rgba(0,0,0,0.95);
+            position: absolute; top: 110px; right: 20px; background: rgba(0,0,0,0.95);
             padding: 20px; border-radius: 15px; border: 1px solid var(--neon-blue);
-            z-index: 1001; width: 280px; max-height: 75vh; overflow-y: auto; transition: 0.3s;
+            z-index: 1001; width: 280px; max-height: 70vh; overflow-y: auto; transition: 0.3s;
         }
         .admin-panel.hidden { transform: translateX(400px); opacity: 0; pointer-events: none; }
-        .admin-panel label { font-size: 0.75rem; color: var(--neon-blue); display: block; margin-top: 8px; }
-        .admin-panel input, .admin-panel select { width: 100%; padding: 8px; background: #111; color: white; border: 1px solid #444; border-radius: 4px; box-sizing: border-box; }
+        .admin-panel input, .admin-panel select { width: 100%; margin-bottom: 8px; padding: 8px; background: #111; color: white; border: 1px solid #444; border-radius: 4px; box-sizing: border-box; }
 
         .main-card {
             background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px;
             border-radius: 30px; width: 95%; max-width: 850px; text-align: center; position: relative; z-index: 2;
         }
         .main-card.paused { opacity: 0.3; pointer-events: none; }
 
-        /* الشعار والاسم */
-        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 5px; flex-direction: row-reverse; }
+        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; flex-direction: row-reverse; }
         .logo-box { width: 65px; height: 65px; border: 2px solid #fff; border-radius: 15px; background: url('logo.png') center/cover no-repeat; }
         .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
-        /* الميزان المرفوع */
-        .balance-area { height: 260px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 50px; position: relative; }
-        .beam { width: 460px; height: 6px; background: #fff; position: absolute; bottom: 150px; left: 50%; margin-left: -230px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
-        .strings { width: 110px; height: 110px; position: relative; }
-        .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1px; height: 115px; background: rgba(255,255,255,0.4); }
+        /* منطقة الميزان المصلحة */
+        .balance-area { height: 260px; margin-bottom: 30px; position: relative; display: flex; justify-content: center; align-items: flex-end; }
+        
+        .beam { 
+            width: 500px; height: 6px; background: #fff; position: absolute; bottom: 160px; 
+            transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5;
+        }
+
+        .basket-anchor { position: absolute; top: 0; display: flex; flex-direction: column; align-items: center; transition: transform 0.7s; }
+        .left-anchor { left: -10px; } .right-anchor { right: -10px; }
+
+        .strings { width: 120px; height: 110px; position: relative; margin-bottom: -5px; }
+        .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1.5px; height: 115px; background: rgba(255,255,255,0.4); }
         .strings::before { left: 10px; transform: rotate(-35deg); transform-origin: top; }
         .strings::after { right: 10px; transform: rotate(35deg); transform-origin: top; }
-        .cup { width: 120px; height: 50px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 60px 60px; display: flex; justify-content: center; align-items: center; }
-        .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 10px; border-radius: 5px; font-size: 1.6rem; font-weight: bold; }
-        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 150px solid rgba(255,255,255,0.15); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
-        /* الأرقام مع تأثير التحديد */
+        .cup { width: 130px; height: 55px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 70px 70px; display: flex; justify-content: center; align-items: center; }
+        .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 12px; border-radius: 5px; font-size: 1.8rem; font-weight: bold; }
+
+        .pivot-triangle { width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 160px solid rgba(255,255,255,0.15); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
+
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
         .num-btn { 
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); 
-            color: white; padding: 15px; font-size: 1.2rem; border-radius: 10px; 
-            cursor: pointer; transition: 0.3s ease; 
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; 
+            font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.3s;
         }
-        .num-btn:hover:not(:disabled) { 
-            border-color: var(--neon-blue); 
-            box-shadow: 0 0 20px var(--neon-blue); 
-            transform: translateY(-5px) scale(1.05);
-            background: rgba(0, 242, 254, 0.1);
-        }
-        .num-btn:active { transform: scale(0.9); }
-        .num-btn:disabled { opacity: 0.1; border-color: red; cursor: not-allowed; }
+        .num-btn:hover:not(:disabled) { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); transform: scale(1.05); }
+        .num-btn:disabled { opacity: 0.1; border-color: red; }
 
         .turn-indicator { margin-top: 15px; font-size: 1.4rem; font-weight: bold; color: var(--neon-blue); }
-        #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); border: 2px solid var(--neon-blue); padding: 10px 30px; border-radius: 50px; z-index: 5000; font-weight: bold; }
+        #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); border: 2px solid var(--neon-blue); padding: 10px 30px; border-radius: 50px; z-index: 5000; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -120,65 +102,42 @@
     <div class="animated-bg"></div>
     <div id="event-msg">حدث فجائي!</div>
 
-    <div class="overlay" id="rules-box">
-        <div class="content-box">
-            <h2>📜 شروط اللعبة</h2>
-            <p>1. ممنوع اختيار نفس الرقم مرتين متتاليتين لنفس الفريق.</p>
-            <p>2. خسارة الجولة وظهور شاشة WASTED عند انتهاء الوقت.</p>
-            <button onclick="toggleOverlay('rules-box')" style="width:100%; padding:10px; background:var(--danger); border:none; color:white; border-radius:8px; cursor:pointer;">موافق</button>
-        </div>
-    </div>
-
-    <div class="overlay" id="info-box">
-        <div class="content-box">
-            <h2>ℹ️ شرح الأحداث</h2>
-            <p>🕳️ الثقب الأسود: يخصم من المجموع.</p>
-            <p>☄️ النيازك: تزيد المجموع.</p>
-            <p>🔋 شحن طاقة: تزيد الوقت المتبقي.</p>
-            <button onclick="toggleOverlay('info-box')" style="width:100%; padding:10px; background:var(--glow-cyan); border:none; color:white; border-radius:8px; cursor:pointer;">فهمت</button>
-        </div>
-    </div>
+    <div class="overlay" id="rules-box"><div class="content-box"><h2>📜 الشروط</h2><p>1. لا تكرر رقمك الأخير.<br>2. انتبه للوقت.</p><button onclick="toggleOverlay('rules-box')">موافق</button></div></div>
+    <div class="overlay" id="info-box"><div class="content-box"><h2>ℹ️ الأحداث</h2><p>🕳️ ثقب: خصم<br>☄️ نيزك: زيادة<br>🔋 شحن: وقت</p><button onclick="toggleOverlay('info-box')">فهمت</button></div></div>
 
     <div class="controls-top">
         <button class="btn-ctrl" onclick="toggleOverlay('rules-box')">الشروط</button>
         <button class="btn-ctrl" onclick="toggleOverlay('info-box')">الأحداث</button>
-        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none; font-weight:bold;">ابدأ ▶️</button>
+        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan);">ابدأ ▶️</button>
         <button class="btn-ctrl" onclick="toggleAdmin()">⚙️</button>
     </div>
 
     <div class="admin-panel hidden" id="admin">
         <label>فريق 1:</label><input type="text" id="n1-in">
         <label>فريق 2:</label><input type="text" id="n2-in">
-        <label>حد الانفجار:</label><input type="number" id="limit-in">
-        <label>الوقت (ثواني):</label><input type="number" id="time-in">
-        <label>تشغيل الأحداث؟</label>
-        <select id="ev-status">
-            <option value="on">تشغيل ✅</option>
-            <option value="off">إيقاف ❌</option>
-        </select>
-        <label>النيازك (+):</label><input type="number" id="plus-v">
-        <label>الثقب (-):</label><input type="number" id="minus-v">
-        <label>الشحن (وقت+):</label><input type="number" id="charge-v">
-        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); border:none; color:white; padding:10px; margin-top:10px; cursor:pointer; font-weight:bold;">حفظ</button>
+        <label>الحد:</label><input type="number" id="limit-in">
+        <label>الوقت:</label><input type="number" id="time-in">
+        <label>أحداث؟</label><select id="ev-t"><option value="on">نعم</option><option value="off">لا</option></select>
+        <label>نيازك (+):</label><input type="number" id="plus-v">
+        <label>ثقب (-):</label><input type="number" id="minus-v">
+        <label>شحن (وقت+):</label><input type="number" id="charge-v">
+        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); padding:10px; color:white; border:none; cursor:pointer;">حفظ</button>
     </div>
 
     <div class="main-card paused" id="game-card">
         <div id="timer" style="font-size: 2.2rem; color: var(--danger); font-weight: bold;">0</div>
-        <div class="logo-area">
-            <h1 class="logo-text">SOLAR</h1>
-            <div class="logo-box"></div>
-        </div>
-        <div>المجموع: <span id="total-val">0</span></div>
+        <div class="logo-area"><h1 class="logo-text">SOLAR</h1><div class="logo-box"></div></div>
+        <div style="margin-bottom: 10px;">المجموع: <span id="total-val">0</span></div>
 
         <div class="balance-area">
             <div class="beam" id="beam">
-                <div class="basket-container" style="left:-10px;" id="cont1">
-                    <small id="t1-n" style="position:absolute; top:-75px; width:100px; left:10px;">فريق 1</small>
+                <div class="basket-anchor left-anchor" id="cont1">
+                    <small id="t1-n" style="position:absolute; top:-75px; width:100px;">فريق 1</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s1">0</div></div>
                 </div>
-                <div class="basket-container" style="right:-10px;" id="cont2">
-                    <small id="t2-n" style="position:absolute; top:-75px; width:100px; right:10px;">فريق 2</small>
+                <div class="basket-anchor right-anchor" id="cont2">
+                    <small id="t2-n" style="position:absolute; top:-75px; width:100px;">فريق 2</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s2">0</div></div>
                 </div>
@@ -194,82 +153,62 @@
 
     <script>
         let total=0, t1=0, t2=0, turn=1, max=0, timeLeft=0, timeLimit=0, timerId, isPaused=true, moves=0;
-        let pV=0, mV=0, cV=0, evEnabled=true, lastT1=null, lastT2=null;
+        let pV=0, mV=0, cV=0, evOn=true, lastT1=null, lastT2=null;
 
         window.onload = () => {
             const s = JSON.parse(localStorage.getItem('solarSettings'));
             if(s) {
-                document.getElementById('n1-in').value = s.n1;
-                document.getElementById('n2-in').value = s.n2;
-                document.getElementById('limit-in').value = s.max;
-                document.getElementById('time-in').value = s.time;
-                document.getElementById('plus-v').value = s.pV;
-                document.getElementById('minus-v').value = s.mV;
-                document.getElementById('charge-v').value = s.cV;
-                document.getElementById('ev-status').value = s.evEnabled ? "on" : "off";
+                document.getElementById('n1-in').value = s.n1; document.getElementById('n2-in').value = s.n2;
+                document.getElementById('limit-in').value = s.max; document.getElementById('time-in').value = s.time;
+                document.getElementById('plus-v').value = s.pV; document.getElementById('minus-v').value = s.mV;
+                document.getElementById('charge-v').value = s.cV; document.getElementById('ev-t').value = s.evOn ? "on" : "off";
                 applySettings(false);
             }
         };
 
         function toggleOverlay(id) { const el = document.getElementById(id); el.style.display = (el.style.display==='flex')?'none':'flex'; }
         function toggleAdmin() { document.getElementById('admin').classList.toggle('hidden'); }
-        
         function togglePause() {
             if(max <= 0 || timeLimit <= 0) { alert("أدخل الإعدادات أولاً!"); return; }
             isPaused = !isPaused;
             document.getElementById('p-btn').innerText = isPaused ? "استكمال ▶️" : "إيقاف ⏸️";
             document.getElementById('game-card').classList.toggle('paused', isPaused);
-            updateUI();
-            if(!isPaused) startTimer(); else clearInterval(timerId);
+            updateUI(); if(!isPaused) startTimer(); else clearInterval(timerId);
         }
 
         function applySettings(close = true) {
             const settings = {
-                n1: document.getElementById('n1-in').value || "فريق 1",
-                n2: document.getElementById('n2-in').value || "فريق 2",
-                max: parseInt(document.getElementById('limit-in').value) || 0,
-                time: parseInt(document.getElementById('time-in').value) || 0,
-                pV: parseInt(document.getElementById('plus-v').value) || 0,
-                mV: parseInt(document.getElementById('minus-v').value) || 0,
-                cV: parseInt(document.getElementById('charge-v').value) || 0,
-                evEnabled: document.getElementById('ev-status').value === "on"
+                n1: document.getElementById('n1-in').value || "فريق 1", n2: document.getElementById('n2-in').value || "فريق 2",
+                max: parseInt(document.getElementById('limit-in').value) || 0, time: parseInt(document.getElementById('time-in').value) || 0,
+                pV: parseInt(document.getElementById('plus-v').value) || 0, mV: parseInt(document.getElementById('minus-v').value) || 0,
+                cV: parseInt(document.getElementById('charge-v').value) || 0, evOn: document.getElementById('ev-t').value === "on"
             };
             localStorage.setItem('solarSettings', JSON.stringify(settings));
-            max = settings.max; timeLimit = settings.time; pV = settings.pV; mV = settings.mV; cV = settings.cV; evEnabled = settings.evEnabled;
-            document.getElementById('t1-n').innerText = settings.n1;
-            document.getElementById('t2-n').innerText = settings.n2;
+            max = settings.max; timeLimit = settings.time; pV = settings.pV; mV = settings.mV; cV = settings.cV; evOn = settings.evOn;
+            document.getElementById('t1-n').innerText = settings.n1; document.getElementById('t2-n').innerText = settings.n2;
             if(close) { toggleAdmin(); reset(); }
         }
 
         function startTimer() {
             clearInterval(timerId); timeLeft = timeLeft > 0 ? timeLeft : timeLimit;
             document.getElementById('timer').innerText = timeLeft;
-            timerId = setInterval(() => {
-                if(!isPaused) {
-                    timeLeft--; document.getElementById('timer').innerText = timeLeft;
-                    if(timeLeft <= 0) endGame();
-                }
-            }, 1000);
+            timerId = setInterval(() => { if(!isPaused) { timeLeft--; document.getElementById('timer').innerText = timeLeft; if(timeLeft <= 0) endGame(); } }, 1000);
         }
 
         function play(v) {
-            if(isPaused) return;
-            total += v; moves++;
+            if(isPaused) return; total += v; moves++;
             if(turn === 1) { t1 += v; lastT1 = v; turn = 2; updateBtns(lastT2); }
             else { t2 += v; lastT2 = v; turn = 1; updateBtns(lastT1); }
-            updateUI();
-            if(evEnabled && moves % 5 === 0) triggerEvent();
+            updateUI(); if(evOn && moves % 5 === 0) triggerEvent();
             if(total >= max) endGame(); else { timeLeft = timeLimit; startTimer(); }
         }
 
         function updateBtns(blocked) { for(let i=1; i<=10; i++) document.getElementById(`btn-${i}`).disabled = (i === blocked); }
 
         function triggerEvent() {
-            const evs = [`🕳️ ثقب أسود: -${mV}`, `☄️ نيازك: +${pV}`, `🔋 شحن طاقة: +${cV}ث`][Math.floor(Math.random()*3)];
+            const evs = [`🕳️ ثقب: -${mV}`, `☄️ نيزك: +${pV}`, `🔋 شحن: +${cV}ث`][Math.floor(Math.random()*3)];
             const m = document.getElementById('event-msg'); m.innerText = evs; m.style.display = 'block';
-            if(evs.includes('ثقب')) total = Math.max(0, total - mV);
-            else if(evs.includes('نيازك')) total += pV;
-            else if(evs.includes('شحن')) timeLeft += cV;
+            if(evs.includes('ثقب')) total = Math.max(0, total - mV); else if(evs.includes('نيازك')) total += pV; else if(evs.includes('شحن')) timeLeft += cV;
             updateUI(); setTimeout(() => m.style.display = 'none', 3000);
         }
 
@@ -284,16 +223,9 @@
             document.getElementById('turn-txt').innerText = isPaused ? "متوقف" : `دور: ${name}`;
         }
 
-        function endGame() {
-            clearInterval(timerId);
-            document.getElementById('wasted-screen').style.display = 'flex';
-            setTimeout(() => location.reload(), 3000);
-        }
+        function endGame() { clearInterval(timerId); document.getElementById('wasted-screen').style.display = 'flex'; setTimeout(() => location.reload(), 3000); }
 
-        function reset() {
-            total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null; timeLeft = timeLimit;
-            updateUI(); updateBtns(null); document.getElementById('timer').innerText = timeLimit;
-        }
+        function reset() { total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null; timeLeft = timeLimit; updateUI(); updateBtns(null); }
     </script>
 </body>
 </html>
