@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزان سولار </title>
+    <title>ميزان سولار - Solar Balance Pro</title>
     <style>
         :root {
             --glow-cyan: #4facfe;
@@ -20,8 +20,18 @@
             position: relative;
         }
 
-        .animated-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
+        /* تثبيت وتحريك الخلفية bg.jpd */
+        .animated-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('bg.jpd') center/cover no-repeat;
+            z-index: -2; animation: spaceMove 40s linear infinite alternate;
+        }
+        @keyframes spaceMove {
+            from { transform: scale(1.1) translate(0, 0); }
+            to { transform: scale(1.2) translate(-20px, -10px); }
+        }
 
+        /* شاشة WASTED */
         #wasted-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center;
@@ -55,9 +65,9 @@
         .logo-box { width: 65px; height: 65px; border: 2px solid #fff; border-radius: 15px; background: url('logo.png') center/cover no-repeat; }
         .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
-        /* منطقة الميزان المرفوعة جداً لمنع التغطية */
+        /* منطقة الميزان - مرفوعة لضمان عدم تغطية الأرقام */
         .balance-area { height: 260px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 50px; position: relative; }
-        .beam { width: 460px; height: 6px; background: #fff; position: absolute; bottom: 140px; left: 50%; margin-left: -230px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
+        .beam { width: 460px; height: 6px; background: #fff; position: absolute; bottom: 150px; left: 50%; margin-left: -230px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
         .basket-container { position: absolute; top: 0; transition: transform 0.7s; }
         .basket-l { left: -10px; } .basket-r { right: -10px; }
         .strings { width: 110px; height: 100px; position: relative; }
@@ -66,7 +76,7 @@
         .strings::after { right: 10px; transform: rotate(35deg); transform-origin: top; }
         .cup { width: 120px; height: 50px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 60px 60px; display: flex; justify-content: center; align-items: center; }
         .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 10px; border-radius: 5px; font-size: 1.6rem; font-weight: bold; }
-        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 140px solid rgba(255,255,255,0.15); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
+        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 150px solid rgba(255,255,255,0.15); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
         .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.2s; }
@@ -75,7 +85,6 @@
 
         .turn-indicator { margin-top: 15px; font-size: 1.4rem; font-weight: bold; color: var(--neon-blue); }
         #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); border: 2px solid var(--neon-blue); padding: 10px 30px; border-radius: 50px; z-index: 5000; font-weight: bold; animation: pop 0.3s; }
-        @keyframes pop { from { transform: translate(-50%, -50%) scale(0.5); } to { transform: translate(-50%, -50%) scale(1); } }
     </style>
 </head>
 <body>
@@ -87,8 +96,8 @@
     <div class="overlay" id="rules-box">
         <div class="content-box">
             <h2>📜 شروط اللعبة</h2>
-            <p>1. لا يمكن للفريق تكرار نفس الرقم مرتين متتاليتين.</p>
-            <p>2. خسارة الجولة فور انتهاء الوقت.</p>
+            <p>1. ممنوع اختيار نفس الرقم مرتين متتاليتين لنفس الفريق.</p>
+            <p>2. تنتهي الجولة وتظهر شاشة WASTED عند انتهاء الوقت.</p>
             <button onclick="toggleOverlay('rules-box')" style="width:100%; padding:10px; background:var(--danger); border:none; color:white; border-radius:8px; cursor:pointer;">موافق</button>
         </div>
     </div>
@@ -96,16 +105,16 @@
     <div class="overlay" id="info-box">
         <div class="content-box">
             <h2>ℹ️ شرح الأحداث</h2>
-            <p>🕳️ الثقب الأسود: يخصم من مجموعك.</p>
-            <p>☄️ النيازك: تزيد من مجموعك.</p>
-            <p>🔋 شحن طاقة: تزيد الوقت المتبقي.</p>
+            <p>🕳️ الثقب الأسود: يخصم من مجموعك الحالي.</p>
+            <p>☄️ النيازك: تزيد من مجموعك الحالي.</p>
+            <p>🔋 شحن طاقة: تزيد الوقت المتبقي لك.</p>
             <button onclick="toggleOverlay('info-box')" style="width:100%; padding:10px; background:var(--glow-cyan); border:none; color:white; border-radius:8px; cursor:pointer;">فهمت</button>
         </div>
     </div>
 
     <div class="controls-top" style="position: absolute; top:20px; right:20px; display:flex; gap:10px; z-index:1000;">
-        <button onclick="toggleOverlay('rules-box')" style="background:none; border:1px solid #fff; color:white; padding:8px; border-radius:8px; cursor:pointer;">الشروط</button>
-        <button onclick="toggleOverlay('info-box')" style="background:none; border:1px solid #fff; color:white; padding:8px; border-radius:8px; cursor:pointer;">الأحداث</button>
+        <button onclick="toggleOverlay('rules-box')" style="background:none; border:1px solid #fff; color:white; padding:8px; border-radius:8px; cursor:pointer;">📜 الشروط</button>
+        <button onclick="toggleOverlay('info-box')" style="background:none; border:1px solid #fff; color:white; padding:8px; border-radius:8px; cursor:pointer;">ℹ️ الأحداث</button>
         <button onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none; padding:8px 15px; color:white; border-radius:8px; cursor:pointer; font-weight:bold;">ابدأ ▶️</button>
         <button onclick="toggleAdmin()" style="background:rgba(0,0,0,0.5); border:1px solid #fff; color:white; padding:8px; border-radius:8px; cursor:pointer;">⚙️</button>
     </div>
@@ -132,17 +141,17 @@
             <h1 class="logo-text">SOLAR</h1>
             <div class="logo-box"></div>
         </div>
-        <div>المجموع: <span id="total-val">0</span></div>
+        <div style="font-weight: bold;">المجموع: <span id="total-val">0</span></div>
 
         <div class="balance-area">
             <div class="beam" id="beam">
                 <div class="basket-container basket-l" id="cont1">
-                    <small id="t1-n" style="position:absolute; top:-70px; width:100px; left:10px;">فريق 1</small>
+                    <small id="t1-n" style="position:absolute; top:-75px; width:100px; left:10px;">فريق 1</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s1">0</div></div>
                 </div>
                 <div class="basket-container basket-r" id="cont2">
-                    <small id="t2-n" style="position:absolute; top:-70px; width:100px; right:10px;">فريق 2</small>
+                    <small id="t2-n" style="position:absolute; top:-75px; width:100px; right:10px;">فريق 2</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s2">0</div></div>
                 </div>
@@ -183,8 +192,8 @@
             isPaused = !isPaused;
             document.getElementById('p-btn').innerText = isPaused ? "استكمال ▶️" : "إيقاف ⏸️";
             document.getElementById('game-card').classList.toggle('paused', isPaused);
-            if(!isPaused) startTimer(); else clearInterval(timerId);
             updateUI();
+            if(!isPaused) startTimer(); else clearInterval(timerId);
         }
 
         function applySettings(close = true) {
@@ -206,7 +215,7 @@
         }
 
         function startTimer() {
-            clearInterval(timerId); timeLeft = timeLimit;
+            clearInterval(timerId); timeLeft = timeLeft > 0 ? timeLeft : timeLimit;
             document.getElementById('timer').innerText = timeLeft;
             timerId = setInterval(() => {
                 if(!isPaused) {
@@ -223,7 +232,7 @@
             else { t2 += v; lastT2 = v; turn = 1; updateBtns(lastT1); }
             updateUI();
             if(evEnabled && moves % 5 === 0) triggerEvent();
-            if(total >= max) endGame(); else startTimer();
+            if(total >= max) endGame(); else { timeLeft = timeLimit; startTimer(); }
         }
 
         function updateBtns(blocked) { for(let i=1; i<=10; i++) document.getElementById(`btn-${i}`).disabled = (i === blocked); }
@@ -244,7 +253,8 @@
             document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
             document.getElementById('cont1').style.transform = `rotate(${-angle}deg)`;
             document.getElementById('cont2').style.transform = `rotate(${-angle}deg)`;
-            document.getElementById('turn-txt').innerText = isPaused ? "متوقف" : `دور: ${turn === 1 ? document.getElementById('t1-n').innerText : document.getElementById('t2-n').innerText}`;
+            const name = turn === 1 ? document.getElementById('t1-n').innerText : document.getElementById('t2-n').innerText;
+            document.getElementById('turn-txt').innerText = isPaused ? "متوقف" : `دور: ${name}`;
         }
 
         function endGame() {
@@ -254,7 +264,7 @@
         }
 
         function reset() {
-            total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null;
+            total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null; timeLeft = timeLimit;
             updateUI(); updateBtns(null); document.getElementById('timer').innerText = timeLimit;
         }
     </script>
