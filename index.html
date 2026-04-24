@@ -23,9 +23,8 @@
         .animated-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('bg.jpd') center/cover no-repeat;
-            z-index: -2; animation: spaceMove 40s linear infinite alternate;
+            z-index: -2;
         }
-        @keyframes spaceMove { from { transform: scale(1.1); } to { transform: scale(1.2); } }
 
         #wasted-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -33,57 +32,46 @@
         }
         #wasted-screen h1 { font-size: 8rem; color: #ff0000; text-shadow: 0 0 20px #600; letter-spacing: 15px; transform: skewX(-10deg); }
 
-        .overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 4000;
-            justify-content: center; align-items: center;
-        }
-        .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; }
-
-        .controls-top { position: absolute; top: 60px; right: 20px; display: flex; gap: 10px; z-index: 1000; }
-        .btn-ctrl { background: rgba(0,0,0,0.6); border: 1px solid white; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
-
         .admin-panel {
-            position: absolute; top: 110px; right: 20px; background: rgba(0,0,0,0.95);
-            padding: 20px; border-radius: 15px; border: 1px solid var(--neon-blue);
-            z-index: 1001; width: 280px; max-height: 70vh; overflow-y: auto; transition: 0.3s;
+            position: absolute; top: 100px; right: 20px; background: rgba(0,0,0,0.95);
+            padding: 15px; border-radius: 15px; border: 1px solid var(--neon-blue);
+            z-index: 1001; width: 260px; max-height: 75vh; overflow-y: auto; transition: 0.3s;
         }
         .admin-panel.hidden { transform: translateX(400px); opacity: 0; pointer-events: none; }
-        .admin-panel input, .admin-panel select { width: 100%; margin-bottom: 8px; padding: 8px; background: #111; color: white; border: 1px solid #444; border-radius: 4px; box-sizing: border-box; }
+        .admin-panel label { font-size: 0.75rem; color: var(--neon-blue); display: block; margin-top: 8px; }
+        .admin-panel input, .admin-panel select { width: 100%; padding: 6px; background: #111; color: white; border: 1px solid #444; border-radius: 4px; box-sizing: border-box; }
 
         .main-card {
             background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px;
-            border-radius: 30px; width: 95%; max-width: 850px; text-align: center; position: relative; z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 20px;
+            border-radius: 30px; width: 95%; max-width: 800px; text-align: center; position: relative; z-index: 2;
+            transition: 0.5s;
         }
-        .main-card.danger-zone { border-color: var(--danger); box-shadow: 0 0 30px var(--danger); animation: pulseDanger 1s infinite alternate; }
-        @keyframes pulseDanger { from { transform: scale(1); } to { transform: scale(1.02); } }
+        .main-card.danger-zone { border-color: var(--danger); box-shadow: 0 0 40px var(--danger); animation: shake 0.2s infinite; }
+        @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, -1px); } }
 
-        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; flex-direction: row-reverse; }
-        .logo-box { width: 65px; height: 65px; border: 2px solid #fff; border-radius: 15px; background: url('logo.png') center/cover no-repeat; }
-        .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 5px; flex-direction: row-reverse; }
+        .logo-box { width: 60px; height: 60px; border: 2px solid #fff; border-radius: 12px; background: url('logo.png') center/cover no-repeat; }
+        .logo-text { font-size: 2.8rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
-        .balance-area { height: 260px; margin-bottom: 30px; position: relative; display: flex; justify-content: center; align-items: flex-end; }
-        .beam { width: 500px; height: 6px; background: #fff; position: absolute; bottom: 160px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
+        .balance-area { height: 280px; position: relative; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 40px; }
+        .beam { width: 440px; height: 6px; background: #fff; position: absolute; bottom: 160px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
         .basket-anchor { position: absolute; top: 0; display: flex; flex-direction: column; align-items: center; transition: transform 0.7s; }
-        .left-anchor { left: -10px; } .right-anchor { right: -10px; }
-        .strings { width: 120px; height: 110px; position: relative; margin-bottom: -5px; }
+        .strings { width: 100px; height: 110px; position: relative; }
         .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1.5px; height: 115px; background: rgba(255,255,255,0.4); }
-        .strings::before { left: 10px; transform: rotate(-35deg); transform-origin: top; }
-        .strings::after { right: 10px; transform: rotate(35deg); transform-origin: top; }
-        .cup { width: 130px; height: 55px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 70px 70px; display: flex; justify-content: center; align-items: center; }
-        .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 12px; border-radius: 5px; font-size: 1.8rem; font-weight: bold; }
-        .pivot-triangle { width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 160px solid rgba(255,255,255,0.15); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
+        .strings::before { left: 8px; transform: rotate(-30deg); transform-origin: top; }
+        .strings::after { right: 8px; transform: rotate(30deg); transform-origin: top; }
+        .cup { width: 110px; height: 50px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 60px 60px; display: flex; justify-content: center; align-items: center; }
+        .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 10px; border-radius: 5px; font-size: 1.6rem; font-weight: bold; }
+        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 160px solid rgba(255,255,255,0.1); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; position: relative; z-index: 10; }
         .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.3s; }
         .num-btn:hover:not(:disabled) { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); transform: scale(1.05); }
-        .num-btn:disabled { opacity: 0.1; border-color: red; }
+        .num-btn:disabled { opacity: 0.1; }
 
-        #timer { transition: 0.3s; }
         .timer-danger { color: #ff0000 !important; animation: blink 0.5s infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-
         #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); border: 2px solid var(--neon-blue); padding: 10px 30px; border-radius: 50px; z-index: 5000; font-weight: bold; }
     </style>
 </head>
@@ -93,14 +81,9 @@
     <div class="animated-bg"></div>
     <div id="event-msg">حدث فجائي!</div>
 
-    <div class="overlay" id="rules-box"><div class="content-box"><h2>📜 الشروط</h2><p>1. لا تكرر رقمك الأخير.<br>2. انتبه للوقت.</p><button onclick="toggleOverlay('rules-box')">موافق</button></div></div>
-    <div class="overlay" id="info-box"><div class="content-box"><h2>ℹ️ الأحداث</h2><p>🕳️ ثقب: يخصم نقاط<br>☄️ نيزك: يزيد نقاط<br>🔋 شحن: يزيد وقت</p><button onclick="toggleOverlay('info-box')">فهمت</button></div></div>
-
-    <div class="controls-top">
-        <button class="btn-ctrl" onclick="toggleOverlay('rules-box')">📜</button>
-        <button class="btn-ctrl" onclick="toggleOverlay('info-box')">ℹ️</button>
-        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan);">ابدأ ▶️</button>
-        <button class="btn-ctrl" onclick="toggleAdmin()">⚙️</button>
+    <div class="controls-top" style="position: absolute; top:20px; right:20px; display:flex; gap:10px; z-index:1000;">
+        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none; padding:8px 15px; color:white; border-radius:8px; cursor:pointer; font-weight:bold;">ابدأ ▶️</button>
+        <button class="btn-ctrl" onclick="toggleAdmin()" style="background:rgba(0,0,0,0.5); border:1px solid #fff; color:white; padding:8px 15px; border-radius:8px; cursor:pointer;">⚙️</button>
     </div>
 
     <div class="admin-panel hidden" id="admin">
@@ -108,27 +91,27 @@
         <label>فريق 2:</label><input type="text" id="n2-in">
         <label>الحد:</label><input type="number" id="limit-in">
         <label>الوقت:</label><input type="number" id="time-in">
-        <label>أحداث؟</label><select id="ev-t"><option value="on">نعم</option><option value="off">لا</option></select>
-        <label>نيازك (+):</label><input type="number" id="plus-v">
-        <label>ثقب (-):</label><input type="number" id="minus-v">
-        <label>شحن (وقت+):</label><input type="number" id="charge-v">
-        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); padding:10px; color:white; border:none; cursor:pointer;">حفظ</button>
+        <label>تشغيل الأحداث؟</label><select id="ev-t"><option value="on">نعم</option><option value="off">لا</option></select>
+        <label>تأثير منطقة الخطر؟</label><select id="danger-t"><option value="on">تشغيل</option><option value="off">إيقاف</option></select>
+        <label>زيادة النيازك (+):</label><input type="number" id="plus-v">
+        <label>نقص الثقب (-):</label><input type="number" id="minus-v">
+        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); padding:10px; color:white; border:none; cursor:pointer; font-weight:bold; margin-top:10px;">حفظ وتطبيق</button>
     </div>
 
     <div class="main-card paused" id="game-card">
-        <div id="timer" style="font-size: 2.2rem; color: var(--danger); font-weight: bold;">0</div>
+        <div id="timer" style="font-size: 2.5rem; color: var(--danger); font-weight: bold;">0</div>
         <div class="logo-area"><h1 class="logo-text">SOLAR</h1><div class="logo-box"></div></div>
         <div style="margin-bottom: 10px;">المجموع: <span id="total-val">0</span></div>
 
         <div class="balance-area">
             <div class="beam" id="beam">
-                <div class="basket-anchor left-anchor" id="cont1">
-                    <small id="t1-n" style="position:absolute; top:-75px; width:100px;">فريق 1</small>
+                <div class="basket-anchor" style="left:-10px;" id="cont1">
+                    <small id="t1-n" style="position:absolute; top:-70px; width:100px;">فريق 1</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s1">0</div></div>
                 </div>
-                <div class="basket-anchor right-anchor" id="cont2">
-                    <small id="t2-n" style="position:absolute; top:-75px; width:100px;">فريق 2</small>
+                <div class="basket-anchor" style="right:-10px;" id="cont2">
+                    <small id="t2-n" style="position:absolute; top:-70px; width:100px;">فريق 2</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s2">0</div></div>
                 </div>
@@ -139,7 +122,7 @@
         <div class="grid">
             <script>for(let i=1; i<=10; i++) document.write(`<button class="num-btn" id="btn-${i}" onclick="play(${i})">${i}</button>`);</script>
         </div>
-        <div class="turn-indicator" id="turn-txt">بانتظار البدء...</div>
+        <div id="turn-txt" style="margin-top:15px; font-weight:bold; color:var(--neon-blue);">بانتظار البدء...</div>
     </div>
 
     <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
@@ -147,38 +130,43 @@
 
     <script>
         let total=0, t1=0, t2=0, turn=1, max=0, timeLeft=0, timeLimit=0, timerId, isPaused=true, moves=0;
-        let pV=0, mV=0, cV=0, evOn=true, lastT1=null, lastT2=null;
+        let pV=0, mV=0, evOn=true, dangerOn=true, dangerLimit=15, lastT1=null, lastT2=null;
 
         window.onload = () => {
             const s = JSON.parse(localStorage.getItem('solarSettings'));
             if(s) {
                 document.getElementById('n1-in').value = s.n1; document.getElementById('n2-in').value = s.n2;
                 document.getElementById('limit-in').value = s.max; document.getElementById('time-in').value = s.time;
-                document.getElementById('plus-v').value = s.pV; document.getElementById('minus-v').value = s.mV;
-                document.getElementById('charge-v').value = s.cV; document.getElementById('ev-t').value = s.evOn ? "on" : "off";
+                document.getElementById('plus-v').value = s.plusV || 0; document.getElementById('minus-v').value = s.minusV || 0;
+                document.getElementById('ev-t').value = s.evOn ? "on" : "off";
+                document.getElementById('danger-t').value = s.dangerOn ? "on" : "off";
                 applySettings(false);
             }
         };
 
-        function toggleOverlay(id) { const el = document.getElementById(id); el.style.display = (el.style.display==='flex')?'none':'flex'; }
         function toggleAdmin() { document.getElementById('admin').classList.toggle('hidden'); }
         function togglePause() {
-            if(max <= 0 || timeLimit <= 0) { alert("أدخل الإعدادات أولاً!"); return; }
+            if(max <= 0) { alert("أدخل الإعدادات أولاً!"); return; }
             isPaused = !isPaused;
             document.getElementById('p-btn').innerText = isPaused ? "استكمال ▶️" : "إيقاف ⏸️";
             document.getElementById('game-card').classList.toggle('paused', isPaused);
-            updateUI(); if(!isPaused) startTimer(); else clearInterval(timerId);
+            if(!isPaused) startTimer(); else clearInterval(timerId);
+            updateUI();
         }
 
         function applySettings(close = true) {
             const settings = {
                 n1: document.getElementById('n1-in').value || "فريق 1", n2: document.getElementById('n2-in').value || "فريق 2",
                 max: parseInt(document.getElementById('limit-in').value) || 0, time: parseInt(document.getElementById('time-in').value) || 0,
-                pV: parseInt(document.getElementById('plus-v').value) || 0, mV: parseInt(document.getElementById('minus-v').value) || 0,
-                cV: parseInt(document.getElementById('charge-v').value) || 0, evOn: document.getElementById('ev-t').value === "on"
+                plusV: parseInt(document.getElementById('plus-v').value) || 0, minusV: parseInt(document.getElementById('minus-v').value) || 0,
+                evOn: document.getElementById('ev-t').value === "on",
+                dangerOn: document.getElementById('danger-t').value === "on"
             };
             localStorage.setItem('solarSettings', JSON.stringify(settings));
-            max = settings.max; timeLimit = settings.time; pV = settings.pV; mV = settings.mV; cV = settings.cV; evOn = settings.evOn;
+            max = settings.max; timeLimit = settings.time; pV = settings.plusV; mV = settings.minusV; 
+            evOn = settings.evOn; dangerOn = settings.dangerOn;
+            dangerLimit = Math.floor(Math.random() * 11) + 10; 
+            
             document.getElementById('t1-n').innerText = settings.n1; document.getElementById('t2-n').innerText = settings.n2;
             if(close) { toggleAdmin(); reset(); }
         }
@@ -186,13 +174,7 @@
         function startTimer() {
             clearInterval(timerId); timeLeft = timeLeft > 0 ? timeLeft : timeLimit;
             document.getElementById('timer').innerText = timeLeft;
-            timerId = setInterval(() => { 
-                if(!isPaused) { 
-                    timeLeft--; 
-                    document.getElementById('timer').innerText = timeLeft;
-                    if(timeLeft <= 0) endGame(); 
-                } 
-            }, 1000);
+            timerId = setInterval(() => { if(!isPaused) { timeLeft--; document.getElementById('timer').innerText = timeLeft; if(timeLeft <= 0) endGame(); } }, 1000);
         }
 
         function play(v) {
@@ -201,34 +183,28 @@
             total += v; moves++;
             if(turn === 1) { t1 += v; lastT1 = v; turn = 2; updateBtns(lastT2); }
             else { t2 += v; lastT2 = v; turn = 1; updateBtns(lastT1); }
-            updateUI(); 
-            if(evOn && moves % 5 === 0) triggerEvent();
+            updateUI(); if(evOn && moves % 5 === 0) triggerEvent();
             if(total >= max) endGame(); else { timeLeft = timeLimit; startTimer(); }
         }
 
         function updateBtns(blocked) { for(let i=1; i<=10; i++) document.getElementById(`btn-${i}`).disabled = (i === blocked); }
 
         function triggerEvent() {
-            const rIdx = Math.floor(Math.random()*3);
+            const r = Math.floor(Math.random()*2); // تم تعديلها لتختار بين حدثين فقط (0 أو 1)
             let msg = "";
-            if(rIdx === 0) { total = Math.max(0, total - mV); msg = `🕳️ ثقب: -${mV}`; }
-            else if(rIdx === 1) { total += pV; msg = `☄️ نيزك: +${pV}`; }
-            else { timeLeft += cV; msg = `🔋 شحن: +${cV}ث`; }
-            
-            const m = document.getElementById('event-msg'); 
-            m.innerText = msg; m.style.display = 'block';
-            updateUI(); 
-            setTimeout(() => m.style.display = 'none', 3000);
+            if(r === 0) { total = Math.max(0, total - mV); msg = `🕳️ ثقب: -${mV}`; }
+            else { total += pV; msg = `☄️ نيزك: +${pV}`; }
+            const m = document.getElementById('event-msg'); m.innerText = msg; m.style.display = 'block';
+            updateUI(); setTimeout(() => m.style.display = 'none', 3000);
         }
 
         function updateUI() {
             document.getElementById('total-val').innerText = total;
             document.getElementById('s1').innerText = t1; document.getElementById('s2').innerText = t2;
             
-            // تنبيه المنطقة الخطرة (باقي 10 نقاط أو أقل)
             const card = document.getElementById('game-card');
             const timerEl = document.getElementById('timer');
-            if(max - total <= 10 && max !== 0) {
+            if(dangerOn && max - total <= dangerLimit && max !== 0) {
                 card.classList.add('danger-zone');
                 timerEl.classList.add('timer-danger');
             } else {
@@ -245,15 +221,13 @@
         }
 
         function endGame() { 
-            clearInterval(timerId); 
-            document.getElementById('sound-boom').play();
+            clearInterval(timerId); document.getElementById('sound-boom').play();
             document.getElementById('wasted-screen').style.display = 'flex'; 
             setTimeout(() => location.reload(), 3000); 
         }
 
         function reset() { 
-            total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null; timeLeft = timeLimit; 
-            updateUI(); updateBtns(null); 
+            total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null; timeLeft = timeLimit; updateUI(); updateBtns(null); 
         }
     </script>
 </body>
