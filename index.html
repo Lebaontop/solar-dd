@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزان سولار - Solar Balance </title>
+    <title>ميزان سولار - Solar Balance Elite</title>
     <style>
         :root {
             --glow-cyan: #4facfe;
@@ -62,7 +62,6 @@
         .btn-apply { width: 100%; background: var(--neon-blue); padding: 10px; color: white; border: none; cursor: pointer; font-weight: bold; margin-top: 15px; border-radius: 8px; }
         .btn-reset-settings { width: 100%; background: #660000; padding: 10px; color: white; border: none; cursor: pointer; font-weight: bold; margin-top: 8px; border-radius: 8px; font-size: 0.8rem; }
 
-        /* بورد شفاف */
         .main-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
@@ -75,7 +74,6 @@
         .main-card.danger-zone { border-color: var(--danger); box-shadow: 0 0 50px rgba(255, 75, 43, 0.3); animation: shake 0.2s infinite; }
         @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, -1px); } }
 
-        /* الشعار يسار الكلمة */
         .logo-area { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 5px; }
         .logo-box { width: 65px; height: 65px; border: 2px solid #fff; border-radius: 15px; background: url('logo.png') center/cover no-repeat; }
         .logo-text { font-size: 3.2rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
@@ -130,8 +128,8 @@
         <div class="content-box">
             <h2 style="color:var(--neon-blue)">ℹ️ شرح الأحداث العشوائية</h2>
             <p>تظهر الأحداث تلقائياً كل 5 حركات:</p>
-            <p>🕳️ <b>الثقب الأسود:</b> يقوم بخصم قيمة عشوائية من المجموع الكلي (يساعدكم على البقاء أكثر).</p>
-            <p>☄️ <b>النيازك:</b> تقوم بإضافة قيمة عشوائية للمجموع الكلي (تسرع من عملية الانفجار!).</p>
+            <p>🕳️ <b>الثقب الأسود:</b> يقوم بخصم قيمة عشوائية من المجموع الكلي.</p>
+            <p>☄️ <b>النيازك:</b> تقوم بإضافة قيمة عشوائية للمجموع الكلي.</p>
             <button class="btn-ctrl" onclick="toggleOverlay('info-box')" style="width:100%; background:var(--glow-cyan); border:none; margin-top:10px;">فهمت</button>
         </div>
     </div>
@@ -210,11 +208,10 @@
             applySettings(false);
         }
 
+        // دالة التصفير الفورية بدون طلب تأكيد
         function resetAllSettings() {
-            if(confirm("سيتم تصفير كافة الإعدادات والفرق.. هل أنت متأكد؟")) {
-                localStorage.removeItem('solarSettings');
-                location.reload();
-            }
+            localStorage.removeItem('solarSettings');
+            location.reload(); // إعادة تحميل الصفحة لتصفير كل شيء فوراً
         }
 
         function toggleOverlay(id) { const el = document.getElementById(id); el.style.display = (el.style.display==='flex')?'none':'flex'; }
