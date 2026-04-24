@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزان سولار </title>
+    <title>ميزان سولار - Solar Balance</title>
     <style>
         :root {
             --glow-cyan: #4facfe;
@@ -34,7 +34,6 @@
         }
         #wasted-screen h1 { font-size: 8rem; color: #ff0000; text-shadow: 0 0 20px #600; letter-spacing: 15px; transform: skewX(-10deg); }
 
-        /* اللوحات المنبثقة */
         .overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 4000;
@@ -42,7 +41,6 @@
         }
         .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; line-height: 1.6; }
 
-        /* لوحة الإعدادات */
         .admin-panel {
             position: absolute; top: 70px; right: 20px; background: rgba(0,0,0,0.95);
             padding: 20px; border-radius: 15px; border: 1px solid var(--neon-blue);
@@ -61,11 +59,16 @@
 
         /* الشعار والاسم */
         .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
-        .logo-box { width: 60px; height: 60px; border: 2px solid #fff; border-radius: 12px; background: url('logo.png') center/cover; position: relative; overflow: hidden; }
-        .logo-box::after { content: ''; position: absolute; inset: 0; background: var(--galaxy); opacity: 0.3; }
-        .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 10px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .logo-box { 
+            width: 70px; height: 70px; 
+            border: 2px solid #fff; 
+            border-radius: 15px; 
+            background: url('logo.png') center/cover no-repeat; 
+            /* تم حذف أي تعديلات لونية هنا ليبقى طبيعياً */
+        }
+        .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
-        /* الميزان المرفوع جداً */
+        /* الميزان المرفوع */
         .balance-area { height: 220px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 80px; position: relative; }
         .beam { 
             width: 480px; height: 6px; background: #fff; position: absolute; bottom: 100px; left: 50%;
@@ -98,8 +101,8 @@
     <div class="overlay" id="rules-box">
         <div class="content-box">
             <h2 style="color:var(--danger)">📜 شروط المعركة</h2>
-            <p>1. ممنوع اختيار نفس الرقم مرتين ورا بعض.</p>
-            <p>2. إذا انتهى الوقت، تنفجر الجولة.</p>
+            <p>1. ممنوع اختيار نفس الرقم مرتين متتاليتين.</p>
+            <p>2. إذا انتهى الوقت، تخسر الجولة فوراً.</p>
             <button onclick="toggleOverlay('rules-box')" style="width:100%; padding:10px; background:var(--danger); border:none; color:white; border-radius:8px; cursor:pointer;">موافق</button>
         </div>
     </div>
@@ -107,8 +110,8 @@
     <div class="overlay" id="info-box">
         <div class="content-box">
             <h2 style="color:var(--glow-cyan)">ℹ️ شرح الأحداث</h2>
-            <p>🕳️ <b>الثقب الأسود:</b> يخصم النقاط.</p>
-            <p>☄️ <b>عاصفة نيازك:</b> تزيد النقاط.</p>
+            <p>🕳️ <b>الثقب الأسود:</b> يخصم من المجموع.</p>
+            <p>☄️ <b>عاصفة نيازك:</b> تزيد من المجموع.</p>
             <button onclick="toggleOverlay('info-box')" style="width:100%; padding:10px; background:var(--glow-cyan); border:none; color:white; border-radius:8px; cursor:pointer;">فهمت</button>
         </div>
     </div>
@@ -123,7 +126,7 @@
     <div class="admin-panel hidden" id="admin">
         <label>فريق 1:</label><input type="text" id="n1-in" value="فريق 1">
         <label>فريق 2:</label><input type="text" id="n2-in" value="فريق 2">
-        <label>حد الانفجار (الرينج):</label><input type="number" id="limit-in" value="0">
+        <label>حد الانفجار:</label><input type="number" id="limit-in" value="0">
         <label>الوقت (ثواني):</label><input type="number" id="time-in" value="0">
         <label>تشغيل الأحداث؟</label><select id="ev-t"><option value="on">نعم</option><option value="off">لا</option></select>
         <label>قيمة الزيادة (+):</label><input type="number" id="plus-v" value="0">
@@ -134,8 +137,8 @@
     <div class="main-card paused" id="game-card">
         <div id="timer" style="font-size: 2.2rem; color: var(--danger); font-weight: bold;">0</div>
         <div class="logo-area">
+            <h1 class="logo-text">ميزان سولار</h1>
             <div class="logo-box"></div>
-            <h1 class="logo-text">SOLAR</h1>
         </div>
         <div style="margin-bottom: 10px;">المجموع الكلي: <span id="total-val">0</span></div>
 
@@ -168,7 +171,7 @@
         function toggleAdmin() { document.getElementById('admin').classList.toggle('hidden'); }
         
         function togglePause() {
-            if(max === 0 || timeLimit === 0) { alert("يا بطل، حط الحد والوقت في الإعدادات أول!"); return; }
+            if(max === 0 || timeLimit === 0) { alert("أدخل الإعدادات أولاً!"); return; }
             isPaused = !isPaused;
             document.getElementById('p-btn').innerText = isPaused ? "استكمال ▶️" : "إيقاف مؤقت ⏸️";
             document.getElementById('game-card').classList.toggle('paused', isPaused);
@@ -198,9 +201,7 @@
             document.getElementById('t1-n').innerText = n1;
             document.getElementById('t2-n').innerText = n2;
             document.getElementById('timer').innerText = timeLimit;
-            
-            toggleAdmin();
-            reset();
+            toggleAdmin(); reset();
         }
 
         function play(v) {
