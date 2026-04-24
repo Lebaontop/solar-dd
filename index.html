@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزان سولار - النسخة الأصلية المطورة</title>
+    <title>ميزان سولار الأسطوري - Solar Ultra</title>
     <style>
         :root {
             --glow-cyan: #4facfe;
@@ -24,7 +24,7 @@
         .animated-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('bg.jpd') center/cover no-repeat;
-            z-index: -2; animation: spaceMove 50s linear infinite alternate;
+            z-index: -2; animation: spaceMove 40s linear infinite alternate;
         }
         @keyframes spaceMove {
             from { transform: scale(1.1) translate(0, 0); }
@@ -33,7 +33,7 @@
 
         /* اللوحات الإضافية */
         .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 4000; justify-content: center; align-items: center; }
-        .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; }
+        .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; line-height: 1.6; }
 
         .controls-top { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 1000; }
         .btn-ctrl { background: rgba(0,0,0,0.6); border: 1px solid white; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
@@ -41,50 +41,68 @@
         .main-card {
             background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 30px; border-radius: 30px; width: 90%; max-width: 850px; text-align: center;
+            padding: 30px; border-radius: 30px; width: 95%; max-width: 850px; text-align: center;
             position: relative; z-index: 2; transition: opacity 0.3s;
         }
         .main-card.paused { opacity: 0.3; pointer-events: none; }
 
-        .logo-text { font-size: 3.5rem; font-weight: 900; letter-spacing: 10px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 10px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
         
-        /* --- الميزان الاحترافي (المربعات) --- */
-        .balance-area { height: 200px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 50px; position: relative; }
+        /* --- تصميم الميزان (نفس الصورة) --- */
+        .balance-area { height: 220px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 30px; position: relative; }
         
-        /* قاعدة المثلث */
+        /* قاعدة الميزان */
         .pivot-container { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 1; }
-        .pivot-triangle { width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 50px solid rgba(255,255,255,0.2); }
-        .pivot-point { width: 14px; height: 14px; background: #fff; border-radius: 50%; margin-bottom: -7px; position: relative; z-index: 10; box-shadow: 0 0 10px #fff; }
+        .pivot-point { width: 16px; height: 16px; background: #fff; border-radius: 50%; margin-bottom: -8px; position: relative; z-index: 10; box-shadow: 0 0 10px #fff; }
+        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 50px solid rgba(255,255,255,0.2); }
 
-        /* المسطرة الجالكسي */
+        /* المسطرة */
         .beam { 
-            width: 480px; height: 6px; background: var(--galaxy); 
-            box-shadow: 0 0 20px rgba(215, 109, 119, 0.6);
-            position: absolute; bottom: 50px; left: 50%; margin-left: -240px; 
+            width: 500px; height: 4px; background: #fff; 
+            position: absolute; bottom: 50px; left: 50%; margin-left: -250px; 
             transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            border-radius: 10px; z-index: 5;
+            transform-origin: center center; z-index: 5;
         }
 
-        /* كفات المربعات (نفس الصورة) */
-        .basket { 
-            width: 105px; height: 75px; 
-            border: 2px solid white; background: rgba(0,0,0,0.8); 
-            position: absolute; top: 12px; border-radius: 10px;
+        /* الكفات الدائرية المعلقة */
+        .basket-container {
+            position: absolute; top: 0; display: flex; flex-direction: column; align-items: center;
+            transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+        .basket-l { left: -10px; } .basket-r { right: -10px; }
+
+        /* الخيوط (مثل الصورة) */
+        .strings { width: 120px; height: 80px; position: relative; margin-bottom: -5px; }
+        .strings::before, .strings::after {
+            content: ''; position: absolute; top: 0; width: 1px; height: 85px; background: rgba(255,255,255,0.5);
+        }
+        .strings::before { left: 10px; transform: rotate(-35deg); transform-origin: top; }
+        .strings::after { right: 10px; transform: rotate(35deg); transform-origin: top; }
+
+        /* الكفة الدائرية */
+        .cup {
+            width: 130px; height: 50px; background: rgba(0,0,0,0.8);
+            border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 70px 70px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            position: relative; overflow: hidden;
         }
-        .basket-l { left: -40px; } .basket-r { right: -40px; }
-        .active-turn { border-color: var(--neon-blue); box-shadow: 0 0 25px var(--neon-blue); border-width: 3px; }
+        .cup::before { content: ''; position: absolute; top: 0; width: 100%; height: 100%; background: var(--galaxy); opacity: 0.1; }
 
-        .score-val { font-size: 2rem; font-weight: bold; margin: 0; }
-        .team-label { font-size: 0.8rem; opacity: 0.7; }
+        /* صندوق الرقم داخل الكفة */
+        .score-box {
+            background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 15px;
+            border-radius: 5px; font-size: 1.8rem; font-weight: bold; z-index: 2;
+        }
+        .team-name-label { font-size: 0.8rem; margin-bottom: 40px; position: absolute; top: -50px; width: 100px; text-align: center; }
+
+        .active-turn .cup { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
 
         /* الأزرار */
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-width: 550px; margin: 0 auto; }
-        .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 18px; font-size: 1.3rem; border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .num-btn:disabled { opacity: 0.15; cursor: not-allowed; border-color: var(--danger); color: var(--danger); }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
+        .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+        .num-btn:disabled { opacity: 0.15; cursor: not-allowed; border-color: var(--danger); }
 
-        #event-msg { display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); border: 2px solid var(--neon-blue); padding: 20px 40px; border-radius: 50px; z-index: 5000; box-shadow: 0 0 30px var(--neon-blue); font-weight: bold; font-size: 1.5rem; }
+        #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.85); border: 2px solid var(--neon-blue); padding: 15px 30px; border-radius: 50px; z-index: 5000; box-shadow: 0 0 30px var(--neon-blue); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -92,34 +110,37 @@
     <div class="animated-bg"></div>
     <div id="event-msg">حدث فجائي!</div>
 
-    <div class="overlay" id="rules-overlay">
+    <div class="overlay" id="info-overlay">
         <div class="content-box">
-            <h2 style="color:var(--glow-cyan)">📜 شروط المعركة</h2>
-            <p>1. ممنوع تكرار نفس رقمك السابق.</p>
-            <p>2. انتبه للوقت والأحداث العشوائية.</p>
-            <button onclick="toggleOverlay('rules-overlay')" style="width:100%; padding:10px; cursor:pointer;">موافق</button>
+            <h2 style="color:var(--glow-cyan)">ℹ️ الأحداث والأرقام</h2>
+            <p>🕳️ <b>الثقب الأسود:</b> خصم 10 نقاط.</p>
+            <p>☄️ <b>عاصفة نيازك:</b> زيادة 10 نقاط.</p>
+            <p>🚫 <b>قانون المنع:</b> لا يمكنك تكرار اختيارك السابق في دورك القادم.</p>
+            <button onclick="toggleOverlay('info-overlay')" style="width:100%; padding:10px; background:var(--glow-cyan); color:white; border:none; border-radius:8px; cursor:pointer;">إغلاق</button>
         </div>
     </div>
 
     <div class="controls-top">
-        <button class="btn-ctrl" onclick="toggleOverlay('rules-overlay')">📜 الشروط</button>
+        <button class="btn-ctrl" onclick="toggleOverlay('info-overlay')">ℹ️ شرح</button>
         <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background: var(--glow-cyan); font-weight:bold;">ابدأ اللعب ▶️</button>
     </div>
 
     <div class="main-card paused" id="game-card">
-        <div id="timer" style="font-size: 2.8rem; color: var(--danger); font-weight: bold;">10</div>
+        <div id="timer" style="font-size: 2.2rem; color: var(--danger); font-weight: bold;">10</div>
         <h1 class="logo-text">SOLAR</h1>
-        <div style="margin-bottom: 20px; font-size: 1.5rem;">المجموع: <span id="total-val">0</span></div>
+        <div style="margin-bottom: 10px; font-size: 1.2rem;">المجموع الكلي: <span id="total-val">0</span></div>
 
         <div class="balance-area">
             <div class="beam" id="beam">
-                <div class="basket basket-l active-turn" id="b1">
-                    <small class="team-label">فريق 1</small>
-                    <p class="score-val" id="s1">0</p>
+                <div class="basket-container basket-l active-turn" id="cont1">
+                    <small class="team-name-label">فريق 1</small>
+                    <div class="strings"></div>
+                    <div class="cup"><div class="score-box" id="s1">0</div></div>
                 </div>
-                <div class="basket basket-r" id="b2">
-                    <small class="team-label">فريق 2</small>
-                    <p class="score-val" id="s2">0</p>
+                <div class="basket-container basket-r" id="cont2">
+                    <small class="team-name-label">فريق 2</small>
+                    <div class="strings"></div>
+                    <div class="cup"><div class="score-box" id="s2">0</div></div>
                 </div>
             </div>
             <div class="pivot-container">
@@ -131,7 +152,7 @@
         <div class="grid">
             <script>for(let i=1; i<=10; i++) document.write(`<button class="num-btn" id="btn-${i}" onclick="play(${i})">${i}</button>`);</script>
         </div>
-        <div id="turn-info" style="margin-top:20px;">دور: <span id="active-p-name">فريق 1</span></div>
+        <div id="turn-info" style="margin-top:15px; font-size: 0.9rem; color: #aaa;">دور: <span id="active-p-name" style="color:white;">فريق 1</span></div>
     </div>
 
     <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
@@ -145,10 +166,9 @@
         
         function togglePause() {
             isPaused = !isPaused;
-            const btn = document.getElementById('p-btn');
-            const card = document.getElementById('game-card');
-            if(isPaused) { clearInterval(timerId); btn.innerText = "استكمال ▶️"; card.classList.add('paused'); }
-            else { btn.innerText = "إيقاف مؤقت ⏸️"; card.classList.remove('paused'); startTimer(); }
+            document.getElementById('p-btn').innerText = isPaused ? "ابدأ اللعب ▶️" : "إيقاف مؤقت ⏸️";
+            document.getElementById('game-card').classList.toggle('paused', isPaused);
+            if(!isPaused) startTimer(); else clearInterval(timerId);
         }
 
         function startTimer() {
@@ -181,13 +201,12 @@
 
         function updateButtonStates(restrictedNum) {
             for(let i=1; i<=10; i++) {
-                const btn = document.getElementById(`btn-${i}`);
-                btn.disabled = (i === restrictedNum);
+                document.getElementById(`btn-${i}`).disabled = (i === restrictedNum);
             }
         }
 
         function triggerEvent() {
-            const evs = ["🕳️ ثقب أسود: -10 نقاط", "☄️ نيازك: +10 نقاط", "🔋 شحن طاقة: الوقت 15ث"];
+            const evs = ["🕳️ ثقب أسود: -10 نقاط", "☄️ عاصفة نيازك: +10 نقاط", "🔋 شحن طاقة: الوقت 15ث"];
             const r = Math.floor(Math.random() * evs.length);
             const m = document.getElementById('event-msg');
             m.innerText = evs[r]; m.style.display = 'block';
@@ -202,16 +221,18 @@
             document.getElementById('total-val').innerText = total;
             document.getElementById('s1').innerText = t1;
             document.getElementById('s2').innerText = t2;
+            
             let angle = (t1 - t2) * -1.8;
             if (angle > 28) angle = 28; if (angle < -28) angle = -28;
             
             document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
-            document.getElementById('b1').style.transform = `rotate(${-angle}deg)`;
-            document.getElementById('b2').style.transform = `rotate(${-angle}deg)`;
+            // الحفاظ على الكفات عمودية
+            document.getElementById('cont1').style.transform = `rotate(${-angle}deg)`;
+            document.getElementById('cont2').style.transform = `rotate(${-angle}deg)`;
             
             document.getElementById('active-p-name').innerText = (turn===1)?"فريق 1":"فريق 2";
-            document.getElementById('b1').classList.toggle('active-turn', turn===1);
-            document.getElementById('b2').classList.toggle('active-turn', turn===2);
+            document.getElementById('cont1').classList.toggle('active-turn', turn===1);
+            document.getElementById('cont2').classList.toggle('active-turn', turn===2);
         }
 
         function endGame(msg) {
