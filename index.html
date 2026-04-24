@@ -20,22 +20,29 @@
             position: relative;
         }
 
-        /* الخلفية المتحركة */
         .animated-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('bg.jpd') center/cover no-repeat;
             z-index: -2; animation: spaceMove 40s linear infinite alternate;
         }
-        @keyframes spaceMove { from { transform: scale(1.1); } to { transform: scale(1.2) translate(-10px, -10px); } }
+        @keyframes spaceMove { from { transform: scale(1.1); } to { transform: scale(1.2); } }
 
         /* شاشة WASTED */
         #wasted-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center;
+            background: rgba(0, 0, 0, 0.9); z-index: 9999; justify-content: center; align-items: center;
         }
         #wasted-screen h1 { font-size: 8rem; color: #ff0000; text-shadow: 0 0 20px #600; letter-spacing: 15px; transform: skewX(-10deg); }
 
-        /* لوحة الإعدادات الشاملة */
+        /* اللوحات المنبثقة */
+        .overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 4000;
+            justify-content: center; align-items: center;
+        }
+        .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; line-height: 1.6; }
+
+        /* لوحة الإعدادات */
         .admin-panel {
             position: absolute; top: 70px; right: 20px; background: rgba(0,0,0,0.95);
             padding: 20px; border-radius: 15px; border: 1px solid var(--neon-blue);
@@ -43,49 +50,43 @@
         }
         .admin-panel.hidden { transform: translateX(400px); opacity: 0; pointer-events: none; }
         .admin-panel label { font-size: 0.8rem; color: var(--neon-blue); display: block; margin-top: 10px; }
-        .admin-panel input, .admin-panel select { width: 100%; padding: 8px; background: #111; color: white; border: 1px solid #444; border-radius: 4px; margin-bottom: 5px; }
+        .admin-panel input, .admin-panel select { width: 100%; padding: 8px; background: #111; color: white; border: 1px solid #444; border-radius: 4px; }
 
         .main-card {
             background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px;
             border-radius: 30px; width: 95%; max-width: 850px; text-align: center; position: relative; z-index: 2;
         }
         .main-card.paused { opacity: 0.3; pointer-events: none; }
 
-        /* الشعار والاسم بألوان جالكسي */
-        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; }
-        .logo-box { 
-            width: 70px; height: 70px; border: 2px solid #fff; border-radius: 15px; 
-            background: url('logo.png') center/cover; position: relative;
-        }
-        .logo-box::after { content: ''; position: absolute; inset: 0; background: var(--galaxy); opacity: 0.3; border-radius: 12px; }
-        .logo-text { font-size: 3.5rem; font-weight: 900; letter-spacing: 10px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+        /* الشعار والاسم */
+        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        .logo-box { width: 60px; height: 60px; border: 2px solid #fff; border-radius: 12px; background: url('logo.png') center/cover; position: relative; overflow: hidden; }
+        .logo-box::after { content: ''; position: absolute; inset: 0; background: var(--galaxy); opacity: 0.3; }
+        .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 10px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
-        /* الميزان المرفوع */
-        .balance-area { height: 200px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 50px; position: relative; }
+        /* الميزان المرفوع جداً */
+        .balance-area { height: 220px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 80px; position: relative; }
         .beam { 
-            width: 500px; height: 6px; background: #fff; position: absolute; bottom: 80px; left: 50%;
-            margin-left: -250px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5;
+            width: 480px; height: 6px; background: #fff; position: absolute; bottom: 100px; left: 50%;
+            margin-left: -240px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5;
         }
         .basket-container { position: absolute; top: 0; transition: transform 0.7s; }
         .basket-l { left: -10px; } .basket-r { right: -10px; }
-        .strings { width: 120px; height: 90px; position: relative; margin-bottom: -5px; }
-        .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1px; height: 95px; background: rgba(255,255,255,0.4); }
+        .strings { width: 120px; height: 100px; position: relative; }
+        .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1px; height: 105px; background: rgba(255,255,255,0.4); }
         .strings::before { left: 10px; transform: rotate(-35deg); transform-origin: top; }
         .strings::after { right: 10px; transform: rotate(35deg); transform-origin: top; }
-        .cup { width: 140px; height: 60px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 75px 75px; display: flex; justify-content: center; align-items: center; }
-        .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 15px; border-radius: 5px; font-size: 2rem; font-weight: bold; }
-        
-        .pivot-container { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
-        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 80px solid rgba(255,255,255,0.2); }
+        .cup { width: 130px; height: 55px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 70px 70px; display: flex; justify-content: center; align-items: center; }
+        .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 12px; border-radius: 5px; font-size: 1.8rem; font-weight: bold; }
+        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 100px solid rgba(255,255,255,0.2); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
         /* الأزرار */
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-width: 550px; margin: 0 auto; }
-        .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 18px; font-size: 1.3rem; border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .num-btn:disabled { opacity: 0.1; cursor: not-allowed; border-color: red; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
+        .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; }
+        .num-btn:disabled { opacity: 0.1; border-color: red; }
 
-        .active-turn .cup { border-color: var(--neon-blue); box-shadow: 0 0 20px var(--neon-blue); }
-        #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); border: 2px solid var(--neon-blue); padding: 15px 40px; border-radius: 50px; z-index: 5000; font-weight: bold; font-size: 1.5rem; }
+        #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); border: 2px solid var(--neon-blue); padding: 10px 30px; border-radius: 50px; z-index: 5000; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -94,135 +95,133 @@
     <div class="animated-bg"></div>
     <div id="event-msg">حدث فجائي!</div>
 
+    <div class="overlay" id="rules-box">
+        <div class="content-box">
+            <h2 style="color:var(--danger)">📜 شروط المعركة</h2>
+            <p>1. ممنوع اختيار نفس الرقم مرتين ورا بعض.</p>
+            <p>2. إذا انتهى الوقت، تنفجر الجولة.</p>
+            <button onclick="toggleOverlay('rules-box')" style="width:100%; padding:10px; background:var(--danger); border:none; color:white; border-radius:8px; cursor:pointer;">موافق</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="info-box">
+        <div class="content-box">
+            <h2 style="color:var(--glow-cyan)">ℹ️ شرح الأحداث</h2>
+            <p>🕳️ <b>الثقب الأسود:</b> يخصم النقاط.</p>
+            <p>☄️ <b>عاصفة نيازك:</b> تزيد النقاط.</p>
+            <button onclick="toggleOverlay('info-box')" style="width:100%; padding:10px; background:var(--glow-cyan); border:none; color:white; border-radius:8px; cursor:pointer;">فهمت</button>
+        </div>
+    </div>
+
     <div class="controls-top" style="position: absolute; top:20px; right:20px; display:flex; gap:10px; z-index:1000;">
-        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none; padding:8px 20px; color:white; border-radius:8px; cursor:pointer; font-weight:bold;">ابدأ ▶️</button>
-        <button class="btn-ctrl" onclick="toggleAdmin()" style="background:rgba(0,0,0,0.5); border:1px solid #fff; color:white; padding:8px 15px; border-radius:8px; cursor:pointer;">⚙️ الإعدادات</button>
+        <button class="btn-ctrl" onclick="toggleOverlay('rules-box')" style="background:none; border:1px solid #fff; color:white; padding:8px; border-radius:8px; cursor:pointer;">📜 الشروط</button>
+        <button class="btn-ctrl" onclick="toggleOverlay('info-box')" style="background:none; border:1px solid #fff; color:white; padding:8px; border-radius:8px; cursor:pointer;">ℹ️ الأحداث</button>
+        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none; padding:8px 15px; color:white; border-radius:8px; cursor:pointer; font-weight:bold;">ابدأ اللعب ▶️</button>
+        <button class="btn-ctrl" onclick="toggleAdmin()" style="background:rgba(0,0,0,0.5); border:1px solid #fff; color:white; padding:8px; border-radius:8px; cursor:pointer;">⚙️</button>
     </div>
 
     <div class="admin-panel hidden" id="admin">
-        <h3 style="margin:0; color:var(--neon-blue);">لوحة التحكم</h3>
-        
-        <label>أسماء الفرق:</label>
-        <input type="text" id="n1-in" placeholder="فريق 1">
-        <input type="text" id="n2-in" placeholder="فريق 2">
-
-        <label>إعدادات الجولة:</label>
-        <input type="number" id="limit-in" placeholder="حد الانفجار" value="80">
-        <input type="number" id="time-in" placeholder="الوقت (ثواني)" value="10">
-
-        <label>إعدادات الأحداث:</label>
-        <select id="event-toggle"><option value="on">تشغيل الأحداث</option><option value="off">إيقاف الأحداث</option></select>
-        <input type="number" id="plus-val" placeholder="زيادة النيازك (+)" value="10">
-        <input type="number" id="minus-val" placeholder="خصم الثقب (-)" value="10">
-
-        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); border:none; color:white; padding:10px; margin-top:10px; cursor:pointer; font-weight:bold; border-radius:5px;">حفظ وتطبيق</button>
+        <label>فريق 1:</label><input type="text" id="n1-in" value="فريق 1">
+        <label>فريق 2:</label><input type="text" id="n2-in" value="فريق 2">
+        <label>حد الانفجار (الرينج):</label><input type="number" id="limit-in" value="0">
+        <label>الوقت (ثواني):</label><input type="number" id="time-in" value="0">
+        <label>تشغيل الأحداث؟</label><select id="ev-t"><option value="on">نعم</option><option value="off">لا</option></select>
+        <label>قيمة الزيادة (+):</label><input type="number" id="plus-v" value="0">
+        <label>قيمة النقص (-):</label><input type="number" id="minus-v" value="0">
+        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); border:none; color:white; padding:10px; margin-top:10px; cursor:pointer; font-weight:bold;">حفظ</button>
     </div>
 
     <div class="main-card paused" id="game-card">
-        <div id="timer" style="font-size: 2.5rem; color: var(--danger); font-weight: bold;">10</div>
-        
+        <div id="timer" style="font-size: 2.2rem; color: var(--danger); font-weight: bold;">0</div>
         <div class="logo-area">
             <div class="logo-box"></div>
             <h1 class="logo-text">SOLAR</h1>
         </div>
-
-        <div style="margin-bottom: 15px; font-size: 1.2rem;">المجموع الكلي: <span id="total-val">0</span></div>
+        <div style="margin-bottom: 10px;">المجموع الكلي: <span id="total-val">0</span></div>
 
         <div class="balance-area">
             <div class="beam" id="beam">
                 <div class="basket-container basket-l active-turn" id="cont1">
-                    <small id="t1-n" style="position:absolute; top:-65px; width:120px; left:10px;">فريق 1</small>
+                    <small id="t1-n" style="position:absolute; top:-70px; width:100px; left:10px;">فريق 1</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s1">0</div></div>
                 </div>
                 <div class="basket-container basket-r" id="cont2">
-                    <small id="t2-n" style="position:absolute; top:-65px; width:120px; right:10px;">فريق 2</small>
+                    <small id="t2-n" style="position:absolute; top:-70px; width:100px; right:10px;">فريق 2</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s2">0</div></div>
                 </div>
             </div>
-            <div class="pivot-container"><div class="pivot-triangle"></div></div>
+            <div class="pivot-triangle"></div>
         </div>
 
         <div class="grid">
             <script>for(let i=1; i<=10; i++) document.write(`<button class="num-btn" id="btn-${i}" onclick="play(${i})">${i}</button>`);</script>
         </div>
-        <div id="turn-info" style="margin-top:15px; color:#aaa;">دور: <span id="active-p-name" style="color:#fff;">فريق 1</span></div>
     </div>
 
-    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
-    <audio id="sound-boom" src="https://assets.mixkit.co/active_storage/sfx/147/147-preview.mp3"></audio>
-
     <script>
-        let total=0, t1=0, t2=0, turn=1, max=80, timeLeft=10, timeLimit=10, timerId, isPaused=true, moves=0;
-        let name1="فريق 1", name2="فريق 2", eventsOn=true, pVal=10, mVal=10, lastT1=null, lastT2=null;
+        let total=0, t1=0, t2=0, turn=1, max=0, timeLeft=0, timeLimit=0, timerId, isPaused=true, moves=0;
+        let n1="فريق 1", n2="فريق 2", evOn=true, pV=0, mV=0, lastT1=null, lastT2=null;
 
+        function toggleOverlay(id) { const el = document.getElementById(id); el.style.display = (el.style.display==='flex')?'none':'flex'; }
         function toggleAdmin() { document.getElementById('admin').classList.toggle('hidden'); }
-
+        
         function togglePause() {
+            if(max === 0 || timeLimit === 0) { alert("يا بطل، حط الحد والوقت في الإعدادات أول!"); return; }
             isPaused = !isPaused;
-            const btn = document.getElementById('p-btn');
+            document.getElementById('p-btn').innerText = isPaused ? "استكمال ▶️" : "إيقاف مؤقت ⏸️";
             document.getElementById('game-card').classList.toggle('paused', isPaused);
-            if(isPaused) { clearInterval(timerId); btn.innerText = "استكمال ▶️"; }
-            else { btn.innerText = "إيقاف ⏸️"; startTimer(); }
+            if(!isPaused) startTimer(); else clearInterval(timerId);
         }
 
         function startTimer() {
-            clearInterval(timerId);
-            timeLeft = timeLimit;
+            clearInterval(timerId); timeLeft = timeLimit;
             document.getElementById('timer').innerText = timeLeft;
             timerId = setInterval(() => {
                 if(!isPaused) {
-                    timeLeft--;
-                    document.getElementById('timer').innerText = timeLeft;
+                    timeLeft--; document.getElementById('timer').innerText = timeLeft;
                     if(timeLeft <= 0) endGame();
                 }
             }, 1000);
         }
 
         function applySettings() {
-            name1 = document.getElementById('n1-in').value || "فريق 1";
-            name2 = document.getElementById('n2-in').value || "فريق 2";
-            max = parseInt(document.getElementById('limit-in').value) || 80;
-            timeLimit = parseInt(document.getElementById('time-in').value) || 10;
-            eventsOn = document.getElementById('event-toggle').value === 'on';
-            pVal = parseInt(document.getElementById('plus-val').value) || 10;
-            mVal = parseInt(document.getElementById('minus-val').value) || 10;
-
-            document.getElementById('t1-n').innerText = name1;
-            document.getElementById('t2-n').innerText = name2;
-            document.getElementById('active-p-name').innerText = name1;
+            n1 = document.getElementById('n1-in').value;
+            n2 = document.getElementById('n2-in').value;
+            max = parseInt(document.getElementById('limit-in').value);
+            timeLimit = parseInt(document.getElementById('time-in').value);
+            evOn = document.getElementById('ev-t').value === 'on';
+            pV = parseInt(document.getElementById('plus-v').value);
+            mV = parseInt(document.getElementById('minus-v').value);
+            
+            document.getElementById('t1-n').innerText = n1;
+            document.getElementById('t2-n').innerText = n2;
+            document.getElementById('timer').innerText = timeLimit;
             
             toggleAdmin();
-            resetGame();
+            reset();
         }
 
         function play(v) {
             if(isPaused) return;
-            document.getElementById('sound-click').play();
             total += v; moves++;
-
             if(turn === 1) { t1 += v; lastT1 = v; turn = 2; updateBtns(lastT2); }
             else { t2 += v; lastT2 = v; turn = 1; updateBtns(lastT1); }
-            
             updateUI();
-            if(eventsOn && moves % 5 === 0) triggerEvent();
-
-            if(total >= max) endGame();
-            else startTimer();
+            if(evOn && moves % 5 === 0) triggerEvent();
+            if(total >= max) endGame(); else startTimer();
         }
 
-        function updateBtns(blocked) {
-            for(let i=1; i<=10; i++) document.getElementById(`btn-${i}`).disabled = (i === blocked);
-        }
+        function updateBtns(blocked) { for(let i=1; i<=10; i++) document.getElementById(`btn-${i}`).disabled = (i === blocked); }
 
         function triggerEvent() {
-            const evs = [`🕳️ ثقب أسود: -${mVal}`, `☄️ نيازك: +${pVal}`, "🔋 شحن: الوقت 15ث"];
+            const evs = [`🕳️ ثقب أسود: -${mV}`, `☄️ نيازك: +${pV}`, "🔋 شحن: الوقت 15ث"];
             const r = Math.floor(Math.random() * 3);
             const m = document.getElementById('event-msg');
             m.innerText = evs[r]; m.style.display = 'block';
-            if(r===0) total = Math.max(0, total - mVal);
-            if(r===1) total += pVal;
+            if(r===0) total = Math.max(0, total - mV);
+            if(r===1) total += pV;
             if(r===2) timeLeft = 15;
             updateUI();
             setTimeout(() => m.style.display = 'none', 3000);
@@ -236,19 +235,17 @@
             document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
             document.getElementById('cont1').style.transform = `rotate(${-angle}deg)`;
             document.getElementById('cont2').style.transform = `rotate(${-angle}deg)`;
-            document.getElementById('active-p-name').innerText = (turn===1)?name1:name2;
             document.getElementById('cont1').classList.toggle('active-turn', turn===1);
             document.getElementById('cont2').classList.toggle('active-turn', turn===2);
         }
 
         function endGame() {
             clearInterval(timerId);
-            document.getElementById('sound-boom').play();
             document.getElementById('wasted-screen').style.display = 'flex';
             setTimeout(() => location.reload(), 3000);
         }
 
-        function resetGame() {
+        function reset() {
             total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null;
             updateUI(); updateBtns(null);
         }
