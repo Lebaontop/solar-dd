@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزان سولار - Solar Balance Elite</title>
+    <title>ميزان سولار - Solar Balance </title>
     <style>
         :root {
             --glow-cyan: #4facfe;
@@ -208,10 +208,10 @@
             applySettings(false);
         }
 
-        // دالة التصفير الفورية بدون طلب تأكيد
+        
         function resetAllSettings() {
             localStorage.removeItem('solarSettings');
-            location.reload(); // إعادة تحميل الصفحة لتصفير كل شيء فوراً
+            location.reload();
         }
 
         function toggleOverlay(id) { const el = document.getElementById(id); el.style.display = (el.style.display==='flex')?'none':'flex'; }
