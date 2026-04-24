@@ -6,16 +6,20 @@
     <title>ميزان سولار - Solar Balance</title>
     <style>
         :root {
-            --glow-color: #4facfe;
-            --danger-color: #ff4b2b;
-            --bg-dark: #0b0d17;
+            --glow-cyan: #4facfe;
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-dark) url('https://www.transparenttextures.com/patterns/stardust.png');
+            /* لون احتياطي غامق في حال لم تظهر الخلفية */
+            background-color: #050510; 
+            /* استدعاء الخلفية بمسار مباشر */
+            background-image: url('bg.jpg'), url('bg.jpeg'), url('bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: white;
             display: flex;
             justify-content: center;
@@ -24,261 +28,118 @@
             overflow: hidden;
         }
 
-        .game-container {
-            width: 90%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
+        /* لوحة التحكم */
+        .admin-panel {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(0, 0, 0, 0.9); padding: 20px;
+            border-radius: 15px; border: 1px solid var(--glow-cyan);
+            z-index: 1000; width: 220px; transition: 0.3s;
+        }
+        .admin-panel.hidden { transform: translateX(250px); opacity: 0; pointer-events: none; }
+
+        .toggle-admin {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(0,0,0,0.6); border: 1px solid white;
+            color: white; padding: 8px 15px; border-radius: 8px;
+            cursor: pointer; z-index: 999;
+        }
+
+        .main-card {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-            text-align: center;
+            padding: 30px; border-radius: 24px;
+            width: 90%; max-width: 800px; text-align: center;
         }
 
-        .logo {
-            font-size: 3rem;
-            font-weight: bold;
-            letter-spacing: 10px;
-            background: linear-gradient(to right, #00f2fe, #4facfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(79, 172, 254, 0.5);
-            margin-bottom: 20px;
+        .header-area { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 5px; color: #fff; text-shadow: 0 0 10px var(--glow-cyan); }
+        
+        /* حاوية الشعار */
+        .logo-container {
+            width: 80px; height: 80px;
+            border: 2px solid white; border-radius: 12px;
+            overflow: hidden; background: #111;
         }
+        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
 
-        .status-board {
-            margin-bottom: 30px;
-            font-size: 1.5rem;
-            color: #aaa;
+        /* الميزان */
+        .balance-box { height: 100px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 50px; }
+        .beam { width: 400px; height: 5px; background: white; position: relative; transition: transform 0.7s ease-out; }
+        .basket { 
+            width: 90px; height: 50px; border: 2px solid white; 
+            background: rgba(0,0,0,0.7); position: absolute; bottom: -50px; 
+            border-radius: 0 0 45px 45px; display: flex; flex-direction: column; justify-content: center; 
         }
+        .basket-l { left: -45px; } .basket-r { right: -45px; }
 
-        #current-sum {
-            color: var(--glow-color);
-            font-weight: bold;
-            font-size: 2rem;
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
+        .btn { 
+            background: rgba(255,255,255,0.1); border: 1px solid white; 
+            color: white; padding: 15px; font-size: 1.2rem; border-radius: 8px; cursor: pointer; 
         }
-
-        /* تصميم الميزان */
-        .scale-container {
-            position: relative;
-            height: 200px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            margin-bottom: 40px;
-        }
-
-        .beam {
-            width: 400px;
-            height: 10px;
-            background: linear-gradient(90deg, var(--glow-color), #fff, var(--glow-color));
-            border-radius: 5px;
-            position: relative;
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-
-        .pivot {
-            width: 0; 
-            height: 0; 
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 40px solid #4facfe;
-            position: absolute;
-            bottom: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .basket {
-            width: 100px;
-            height: 60px;
-            background: rgba(79, 172, 254, 0.2);
-            border: 2px solid var(--glow-color);
-            border-radius: 0 0 50px 50px;
-            position: absolute;
-            bottom: -60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: 0.3s;
-        }
-
-        .basket-1 { left: -50px; }
-        .basket-2 { right: -50px; }
-
-        .score-val {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .turn-info {
-            font-size: 1.2rem;
-            margin: 20px 0;
-            padding: 10px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .active-1 { border-right: 5px solid var(--glow-color); }
-        .active-2 { border-left: 5px solid var(--glow-color); }
-
-        /* الأزرار */
-        .controls {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        button {
-            padding: 15px;
-            font-size: 1.2rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glow-color);
-            color: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button:hover {
-            background: var(--glow-color);
-            box-shadow: 0 0 15px var(--glow-color);
-            transform: translateY(-3px);
-        }
-
-        button:active { transform: scale(0.95); }
-
-        .explosion {
-            animation: shake 0.5s infinite;
-            border-color: var(--danger-color) !important;
-        }
-
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            40% { transform: translate(3px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            80% { transform: translate(3px, 1px) rotate(-1deg); }
-            100% { transform: translate(1px, -2px) rotate(1deg); }
-        }
+        .btn:hover { background: var(--glow-cyan); }
     </style>
 </head>
 <body>
 
-    <div class="game-container" id="main-container">
-        <div class="logo">SOLAR</div>
-        
-        <div class="status-board">
-            المجموع الحالي: <span id="current-sum">0</span>
-        </div>
+    <button class="toggle-admin" onclick="toggleAdmin()">⚙️ الإعدادات</button>
 
-        <div class="scale-container">
-            <div class="beam" id="beam">
-                <div class="basket basket-1">
-                    <span>فريق 1</span>
-                    <div class="score-val" id="score1">0</div>
-                </div>
-                <div class="basket basket-2">
-                    <span>فريق 2</span>
-                    <div class="score-val" id="score2">0</div>
-                </div>
+    <div class="admin-panel" id="admin-panel">
+        <input type="text" id="n1" placeholder="اسم الفريق 1" style="width:100%; margin-bottom:5px;">
+        <input type="text" id="n2" placeholder="اسم الفريق 2" style="width:100%; margin-bottom:5px;">
+        <input type="number" id="limit" placeholder="الحد" style="width:100%; margin-bottom:10px;">
+        <button onclick="apply()" style="width:100%; background:var(--glow-cyan); border:none; color:white; padding:10px; cursor:pointer;">حفظ</button>
+    </div>
+
+    <div class="main-card" id="card">
+        <div class="header-area">
+            <h1 class="logo-text">SOLAR</h1>
+            <div class="logo-container">
+                <img src="logo.png" onerror="this.src='logo.jpg'; this.onerror=function(){this.src='logo.jpeg';};">
             </div>
-            <div class="pivot"></div>
         </div>
 
-        <div class="turn-info" id="turn-box">
-            دور: <span id="current-player-name">الفريق الأول</span>
+        <div style="font-size: 2rem; margin-bottom: 20px;">المجموع: <span id="total">0</span></div>
+
+        <div class="balance-box">
+            <div class="beam" id="beam">
+                <div class="basket basket-l"><small id="ln1">الفريق 1</small><b id="s1">0</b></div>
+                <div class="basket basket-r"><small id="ln2">الفريق 2</small><b id="s2">0</b></div>
+            </div>
         </div>
 
-        <div class="controls">
-            <button onclick="play(1)">1</button>
-            <button onclick="play(2)">2</button>
-            <button onclick="play(3)">3</button>
-            <button onclick="play(4)">4</button>
-            <button onclick="play(5)">5</button>
-            <button onclick="play(6)">6</button>
-            <button onclick="play(7)">7</button>
-            <button onclick="play(8)">8</button>
-            <button onclick="play(9)">9</button>
-            <button onclick="play(10)">10</button>
+        <div class="grid">
+            <script>
+                for(let i=1; i<=10; i++) document.write(`<button class="btn" onclick="play(${i})">${i}</button>`);
+            </script>
         </div>
     </div>
 
     <script>
-        let totalWeight = 0;
-        let team1Score = 0;
-        let team2Score = 0;
-        let currentPlayer = 1;
-        
-        // الحد مخفي عن اللاعبين - يمكنك تغييره أو جعله عشوائياً
-        const secretLimit = 80; 
-
-        function play(value) {
-            totalWeight += value;
-            
-            if (currentPlayer === 1) {
-                team1Score += value;
-                document.getElementById('score1').innerText = team1Score;
-                currentPlayer = 2;
-                document.getElementById('current-player-name').innerText = "الفريق الثاني";
-            } else {
-                team2Score += value;
-                document.getElementById('score2').innerText = team2Score;
-                currentPlayer = 1;
-                document.getElementById('current-player-name').innerText = "الفريق الأول";
-            }
-
-            updateInterface();
-            checkStatus();
+        let total=0, t1=0, t2=0, turn=1, max=80;
+        function toggleAdmin() { document.getElementById('admin-panel').classList.toggle('hidden'); }
+        function apply() {
+            max = parseInt(document.getElementById('limit').value) || 80;
+            document.getElementById('ln1').innerText = document.getElementById('n1').value || "الفريق 1";
+            document.getElementById('ln2').innerText = document.getElementById('n2').value || "الفريق 2";
+            toggleAdmin(); reset();
         }
-
-        function updateInterface() {
-            document.getElementById('current-sum').innerText = totalWeight;
-            
-            // حساب ميلان الميزان بناءً على الفرق بين الفريقين
-            // كلما زاد الوزن لجهة، تميل تلك الجهة للأسفل
-            let diff = team2Score - team1Score;
-            let angle = diff * 1.5; // معامل الميل
-            
-            // تحديد حد أقصى للميلان
-            if (angle > 30) angle = 30;
-            if (angle < -30) angle = -30;
-
+        function play(v) {
+            total += v;
+            if(turn===1) { t1+=v; document.getElementById('s1').innerText=t1; turn=2; }
+            else { t2+=v; document.getElementById('s2').innerText=t2; turn=1; }
+            document.getElementById('total').innerText = total;
+            let angle = (t1-t2)*-2;
             document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
+            if(total >= max) { alert("انفجر الميزان!"); reset(); }
         }
-
-        function checkStatus() {
-            if (totalWeight >= secretLimit) {
-                // الفريق الذي تسبب في الانفجار هو الخاسر
-                let loser = (currentPlayer === 1) ? "الثاني" : "الأول";
-                
-                document.getElementById('main-container').classList.add('explosion');
-                
-                setTimeout(() => {
-                    alert(`انفجر الميزان! الحد كان ${secretLimit}. الفريق ${loser} خسر!`);
-                    resetGame();
-                }, 100);
-            }
-        }
-
-        function resetGame() {
-            totalWeight = 0;
-            team1Score = 0;
-            team2Score = 0;
-            currentPlayer = 1;
-            
-            document.getElementById('score1').innerText = "0";
-            document.getElementById('score2').innerText = "0";
-            document.getElementById('current-sum').innerText = "0";
-            document.getElementById('current-player-name').innerText = "الفريق الأول";
-            document.getElementById('beam').style.transform = `rotate(0deg)`;
-            document.getElementById('main-container').classList.remove('explosion');
+        function reset() {
+            total=0; t1=0; t2=0; turn=1;
+            document.getElementById('total').innerText="0";
+            document.getElementById('s1').innerText="0";
+            document.getElementById('s2').innerText="0";
+            document.getElementById('beam').style.transform="rotate(0deg)";
         }
     </script>
 </body>
