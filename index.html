@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزان سولار  - Solar Ultra PRO</title>
+    <title>ميزان سولار </title>
     <style>
         :root {
             --glow-cyan: #4facfe;
             --neon-blue: #00f2fe;
             --danger: #ff4b2b;
-            --galaxy: linear-gradient(90deg, #3a1c71, #d76d77, #ffaf7b, #4facfe);
+            --galaxy: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b, #4facfe);
         }
 
         body {
@@ -28,104 +28,115 @@
         }
         @keyframes spaceMove { from { transform: scale(1.1); } to { transform: scale(1.2) translate(-10px, -10px); } }
 
-        /* شاشة WASTED عند الخسارة */
+        /* شاشة WASTED */
         #wasted-screen {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); backdrop-filter: grayscale(1) contrast(1.5);
-            z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
+            background: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center;
         }
-        #wasted-screen h1 {
-            font-size: 8rem; color: #ff0000; text-shadow: 0 0 20px #600;
-            letter-spacing: 15px; margin: 0; transform: skewX(-10deg);
-            animation: wastedAnim 0.5s ease-out forwards;
-        }
-        @keyframes wastedAnim { from { transform: scale(3) skewX(-10deg); opacity: 0; } to { transform: scale(1) skewX(-10deg); opacity: 1; } }
+        #wasted-screen h1 { font-size: 8rem; color: #ff0000; text-shadow: 0 0 20px #600; letter-spacing: 15px; transform: skewX(-10deg); }
 
-        /* لوحة الإعدادات */
+        /* لوحة الإعدادات الشاملة */
         .admin-panel {
             position: absolute; top: 70px; right: 20px; background: rgba(0,0,0,0.95);
-            padding: 15px; border-radius: 15px; border: 1px solid var(--neon-blue);
-            z-index: 1001; width: 260px; transition: 0.3s; font-size: 0.85rem;
+            padding: 20px; border-radius: 15px; border: 1px solid var(--neon-blue);
+            z-index: 1001; width: 280px; max-height: 80vh; overflow-y: auto; transition: 0.3s;
         }
-        .admin-panel.hidden { transform: translateX(350px); opacity: 0; pointer-events: none; }
-        .admin-panel input, .admin-panel select { width: 100%; margin-bottom: 8px; padding: 6px; background: #111; color: white; border: 1px solid #444; border-radius: 4px; }
+        .admin-panel.hidden { transform: translateX(400px); opacity: 0; pointer-events: none; }
+        .admin-panel label { font-size: 0.8rem; color: var(--neon-blue); display: block; margin-top: 10px; }
+        .admin-panel input, .admin-panel select { width: 100%; padding: 8px; background: #111; color: white; border: 1px solid #444; border-radius: 4px; margin-bottom: 5px; }
 
         .main-card {
             background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px;
-            border-radius: 30px; width: 95%; max-width: 850px; text-align: center;
-            position: relative; z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px;
+            border-radius: 30px; width: 95%; max-width: 850px; text-align: center; position: relative; z-index: 2;
         }
         .main-card.paused { opacity: 0.3; pointer-events: none; }
 
-        /* الشعار والاسم */
-        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
-        .logo-box { width: 60px; height: 60px; border: 2px solid #fff; border-radius: 12px; background: url('logo.png') center/cover; }
-        .logo-text { font-size: 2.8rem; font-weight: 900; letter-spacing: 8px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        /* الشعار والاسم بألوان جالكسي */
+        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .logo-box { 
+            width: 70px; height: 70px; border: 2px solid #fff; border-radius: 15px; 
+            background: url('logo.png') center/cover; position: relative;
+        }
+        .logo-box::after { content: ''; position: absolute; inset: 0; background: var(--galaxy); opacity: 0.3; border-radius: 12px; }
+        .logo-text { font-size: 3.5rem; font-weight: 900; letter-spacing: 10px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
 
-        /* الميزان المرتفع */
-        .balance-area { height: 180px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 40px; position: relative; }
+        /* الميزان المرفوع */
+        .balance-area { height: 200px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 50px; position: relative; }
         .beam { 
-            width: 480px; height: 5px; background: #fff; position: absolute; bottom: 65px; left: 50%;
-            margin-left: -240px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5;
+            width: 500px; height: 6px; background: #fff; position: absolute; bottom: 80px; left: 50%;
+            margin-left: -250px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5;
         }
         .basket-container { position: absolute; top: 0; transition: transform 0.7s; }
         .basket-l { left: -10px; } .basket-r { right: -10px; }
-        .strings { width: 120px; height: 75px; position: relative; margin-bottom: -5px; }
-        .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1px; height: 80px; background: rgba(255,255,255,0.4); }
+        .strings { width: 120px; height: 90px; position: relative; margin-bottom: -5px; }
+        .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1px; height: 95px; background: rgba(255,255,255,0.4); }
         .strings::before { left: 10px; transform: rotate(-35deg); transform-origin: top; }
         .strings::after { right: 10px; transform: rotate(35deg); transform-origin: top; }
-        .cup { width: 130px; height: 55px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 70px 70px; display: flex; justify-content: center; align-items: center; }
-        .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 12px; border-radius: 5px; font-size: 1.8rem; font-weight: bold; }
-        .pivot-container { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
-        .pivot-triangle { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 65px solid rgba(255,255,255,0.2); }
+        .cup { width: 140px; height: 60px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 75px 75px; display: flex; justify-content: center; align-items: center; }
+        .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 15px; border-radius: 5px; font-size: 2rem; font-weight: bold; }
+        
+        .pivot-container { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
+        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 80px solid rgba(255,255,255,0.2); }
 
         /* الأزرار */
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
-        .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.2s; }
-        .num-btn:disabled { opacity: 0.15; cursor: not-allowed; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-width: 550px; margin: 0 auto; }
+        .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 18px; font-size: 1.3rem; border-radius: 12px; cursor: pointer; transition: 0.2s; }
+        .num-btn:disabled { opacity: 0.1; cursor: not-allowed; border-color: red; }
 
-        .active-turn .cup { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
-        #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); border: 2px solid var(--neon-blue); padding: 15px 30px; border-radius: 50px; z-index: 5000; font-weight: bold; }
+        .active-turn .cup { border-color: var(--neon-blue); box-shadow: 0 0 20px var(--neon-blue); }
+        #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); border: 2px solid var(--neon-blue); padding: 15px 40px; border-radius: 50px; z-index: 5000; font-weight: bold; font-size: 1.5rem; }
     </style>
 </head>
 <body>
 
     <div id="wasted-screen"><h1>WASTED</h1></div>
     <div class="animated-bg"></div>
-    <div id="event-msg">حدث فضائي!</div>
+    <div id="event-msg">حدث فجائي!</div>
 
     <div class="controls-top" style="position: absolute; top:20px; right:20px; display:flex; gap:10px; z-index:1000;">
-        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none; padding:8px 15px; color:white; border-radius:8px; cursor:pointer;">ابدأ اللعب ▶️</button>
-        <button class="btn-ctrl" onclick="toggleAdmin()" style="background:rgba(0,0,0,0.5); border:1px solid #fff; color:white; padding:8px 15px; border-radius:8px; cursor:pointer;">⚙️</button>
+        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none; padding:8px 20px; color:white; border-radius:8px; cursor:pointer; font-weight:bold;">ابدأ ▶️</button>
+        <button class="btn-ctrl" onclick="toggleAdmin()" style="background:rgba(0,0,0,0.5); border:1px solid #fff; color:white; padding:8px 15px; border-radius:8px; cursor:pointer;">⚙️ الإعدادات</button>
     </div>
 
     <div class="admin-panel hidden" id="admin">
-        <label>تشغيل الأحداث؟</label>
-        <select id="event-toggle"><option value="on">نعم</option><option value="off">لا</option></select>
-        <label>زيادة النيازك (+):</label><input type="number" id="plus-val" value="10">
-        <label>خصم الثقب الأسود (-):</label><input type="number" id="minus-val" value="10">
-        <label>حد الانفجار:</label><input type="number" id="limit-in" value="80">
-        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); border:none; color:white; padding:8px; cursor:pointer; font-weight:bold;">حفظ</button>
+        <h3 style="margin:0; color:var(--neon-blue);">لوحة التحكم</h3>
+        
+        <label>أسماء الفرق:</label>
+        <input type="text" id="n1-in" placeholder="فريق 1">
+        <input type="text" id="n2-in" placeholder="فريق 2">
+
+        <label>إعدادات الجولة:</label>
+        <input type="number" id="limit-in" placeholder="حد الانفجار" value="80">
+        <input type="number" id="time-in" placeholder="الوقت (ثواني)" value="10">
+
+        <label>إعدادات الأحداث:</label>
+        <select id="event-toggle"><option value="on">تشغيل الأحداث</option><option value="off">إيقاف الأحداث</option></select>
+        <input type="number" id="plus-val" placeholder="زيادة النيازك (+)" value="10">
+        <input type="number" id="minus-val" placeholder="خصم الثقب (-)" value="10">
+
+        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); border:none; color:white; padding:10px; margin-top:10px; cursor:pointer; font-weight:bold; border-radius:5px;">حفظ وتطبيق</button>
     </div>
 
     <div class="main-card paused" id="game-card">
-        <div id="timer" style="font-size: 2.2rem; color: var(--danger); font-weight: bold;">10</div>
+        <div id="timer" style="font-size: 2.5rem; color: var(--danger); font-weight: bold;">10</div>
+        
         <div class="logo-area">
-            <h1 class="logo-text">SOLAR</h1>
             <div class="logo-box"></div>
+            <h1 class="logo-text">SOLAR</h1>
         </div>
-        <div style="margin-bottom: 10px; font-size: 1.1rem;">المجموع الكلي: <span id="total-val">0</span></div>
+
+        <div style="margin-bottom: 15px; font-size: 1.2rem;">المجموع الكلي: <span id="total-val">0</span></div>
 
         <div class="balance-area">
             <div class="beam" id="beam">
                 <div class="basket-container basket-l active-turn" id="cont1">
-                    <small style="position:absolute; top:-55px; width:100px; left:15px;">فريق 1</small>
+                    <small id="t1-n" style="position:absolute; top:-65px; width:120px; left:10px;">فريق 1</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s1">0</div></div>
                 </div>
                 <div class="basket-container basket-r" id="cont2">
-                    <small style="position:absolute; top:-55px; width:100px; right:15px;">فريق 2</small>
+                    <small id="t2-n" style="position:absolute; top:-65px; width:120px; right:10px;">فريق 2</small>
                     <div class="strings"></div>
                     <div class="cup"><div class="score-box" id="s2">0</div></div>
                 </div>
@@ -136,45 +147,77 @@
         <div class="grid">
             <script>for(let i=1; i<=10; i++) document.write(`<button class="num-btn" id="btn-${i}" onclick="play(${i})">${i}</button>`);</script>
         </div>
+        <div id="turn-info" style="margin-top:15px; color:#aaa;">دور: <span id="active-p-name" style="color:#fff;">فريق 1</span></div>
     </div>
 
+    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+    <audio id="sound-boom" src="https://assets.mixkit.co/active_storage/sfx/147/147-preview.mp3"></audio>
+
     <script>
-        let total=0, t1=0, t2=0, turn=1, max=80, timeLeft=10, timerId, isPaused=true, moves=0;
-        let lastT1=null, lastT2=null, eventsOn=true, pVal=10, mVal=10;
+        let total=0, t1=0, t2=0, turn=1, max=80, timeLeft=10, timeLimit=10, timerId, isPaused=true, moves=0;
+        let name1="فريق 1", name2="فريق 2", eventsOn=true, pVal=10, mVal=10, lastT1=null, lastT2=null;
 
         function toggleAdmin() { document.getElementById('admin').classList.toggle('hidden'); }
+
         function togglePause() {
             isPaused = !isPaused;
-            document.getElementById('p-btn').innerText = isPaused ? "ابدأ اللعب ▶️" : "إيقاف مؤقت ⏸️";
+            const btn = document.getElementById('p-btn');
             document.getElementById('game-card').classList.toggle('paused', isPaused);
-            if(!isPaused) startTimer(); else clearInterval(timerId);
+            if(isPaused) { clearInterval(timerId); btn.innerText = "استكمال ▶️"; }
+            else { btn.innerText = "إيقاف ⏸️"; startTimer(); }
         }
 
         function startTimer() {
-            clearInterval(timerId); timeLeft = 10;
+            clearInterval(timerId);
+            timeLeft = timeLimit;
             document.getElementById('timer').innerText = timeLeft;
             timerId = setInterval(() => {
                 if(!isPaused) {
-                    timeLeft--; document.getElementById('timer').innerText = timeLeft;
+                    timeLeft--;
+                    document.getElementById('timer').innerText = timeLeft;
                     if(timeLeft <= 0) endGame();
                 }
             }, 1000);
         }
 
-        function play(v) {
-            if(isPaused) return;
-            total += v; moves++;
-            if(turn === 1) { t1 += v; lastT1 = v; turn = 2; updateBtns(lastT2); }
-            else { t2 += v; lastT2 = v; turn = 1; updateBtns(lastT1); }
-            updateUI();
-            if(eventsOn && moves % 5 === 0) triggerEvent();
-            if(total >= max) endGame(); else startTimer();
+        function applySettings() {
+            name1 = document.getElementById('n1-in').value || "فريق 1";
+            name2 = document.getElementById('n2-in').value || "فريق 2";
+            max = parseInt(document.getElementById('limit-in').value) || 80;
+            timeLimit = parseInt(document.getElementById('time-in').value) || 10;
+            eventsOn = document.getElementById('event-toggle').value === 'on';
+            pVal = parseInt(document.getElementById('plus-val').value) || 10;
+            mVal = parseInt(document.getElementById('minus-val').value) || 10;
+
+            document.getElementById('t1-n').innerText = name1;
+            document.getElementById('t2-n').innerText = name2;
+            document.getElementById('active-p-name').innerText = name1;
+            
+            toggleAdmin();
+            resetGame();
         }
 
-        function updateBtns(blocked) { for(let i=1; i<=10; i++) document.getElementById(`btn-${i}`).disabled = (i === blocked); }
+        function play(v) {
+            if(isPaused) return;
+            document.getElementById('sound-click').play();
+            total += v; moves++;
+
+            if(turn === 1) { t1 += v; lastT1 = v; turn = 2; updateBtns(lastT2); }
+            else { t2 += v; lastT2 = v; turn = 1; updateBtns(lastT1); }
+            
+            updateUI();
+            if(eventsOn && moves % 5 === 0) triggerEvent();
+
+            if(total >= max) endGame();
+            else startTimer();
+        }
+
+        function updateBtns(blocked) {
+            for(let i=1; i<=10; i++) document.getElementById(`btn-${i}`).disabled = (i === blocked);
+        }
 
         function triggerEvent() {
-            const evs = [`🕳️ ثقب أسود: -${mVal} نقاط`, `☄️ نيازك: +${pVal} نقاط`, "🔋 شحن: الوقت 15ث"];
+            const evs = [`🕳️ ثقب أسود: -${mVal}`, `☄️ نيازك: +${pVal}`, "🔋 شحن: الوقت 15ث"];
             const r = Math.floor(Math.random() * 3);
             const m = document.getElementById('event-msg');
             m.innerText = evs[r]; m.style.display = 'block';
@@ -193,23 +236,21 @@
             document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
             document.getElementById('cont1').style.transform = `rotate(${-angle}deg)`;
             document.getElementById('cont2').style.transform = `rotate(${-angle}deg)`;
+            document.getElementById('active-p-name').innerText = (turn===1)?name1:name2;
             document.getElementById('cont1').classList.toggle('active-turn', turn===1);
             document.getElementById('cont2').classList.toggle('active-turn', turn===2);
         }
 
-        function applySettings() {
-            eventsOn = document.getElementById('event-toggle').value === 'on';
-            pVal = parseInt(document.getElementById('plus-val').value);
-            mVal = parseInt(document.getElementById('minus-val').value);
-            max = parseInt(document.getElementById('limit-in').value);
-            toggleAdmin();
-        }
-
         function endGame() {
             clearInterval(timerId);
-            const screen = document.getElementById('wasted-screen');
-            screen.style.display = 'flex';
+            document.getElementById('sound-boom').play();
+            document.getElementById('wasted-screen').style.display = 'flex';
             setTimeout(() => location.reload(), 3000);
+        }
+
+        function resetGame() {
+            total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null;
+            updateUI(); updateBtns(null);
         }
     </script>
 </body>
