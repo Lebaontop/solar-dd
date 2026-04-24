@@ -40,7 +40,6 @@
         }
         .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; }
 
-        /* الأزرار العلوية */
         .controls-top { position: absolute; top: 60px; right: 20px; display: flex; gap: 10px; z-index: 1000; }
         .btn-ctrl { background: rgba(0,0,0,0.6); border: 1px solid white; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; }
 
@@ -57,42 +56,34 @@
             border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px;
             border-radius: 30px; width: 95%; max-width: 850px; text-align: center; position: relative; z-index: 2;
         }
-        .main-card.paused { opacity: 0.3; pointer-events: none; }
+        .main-card.danger-zone { border-color: var(--danger); box-shadow: 0 0 30px var(--danger); animation: pulseDanger 1s infinite alternate; }
+        @keyframes pulseDanger { from { transform: scale(1); } to { transform: scale(1.02); } }
 
         .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; flex-direction: row-reverse; }
         .logo-box { width: 65px; height: 65px; border: 2px solid #fff; border-radius: 15px; background: url('logo.png') center/cover no-repeat; }
         .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
-        /* منطقة الميزان المصلحة */
         .balance-area { height: 260px; margin-bottom: 30px; position: relative; display: flex; justify-content: center; align-items: flex-end; }
-        
-        .beam { 
-            width: 500px; height: 6px; background: #fff; position: absolute; bottom: 160px; 
-            transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5;
-        }
-
+        .beam { width: 500px; height: 6px; background: #fff; position: absolute; bottom: 160px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
         .basket-anchor { position: absolute; top: 0; display: flex; flex-direction: column; align-items: center; transition: transform 0.7s; }
         .left-anchor { left: -10px; } .right-anchor { right: -10px; }
-
         .strings { width: 120px; height: 110px; position: relative; margin-bottom: -5px; }
         .strings::before, .strings::after { content: ''; position: absolute; top: 0; width: 1.5px; height: 115px; background: rgba(255,255,255,0.4); }
         .strings::before { left: 10px; transform: rotate(-35deg); transform-origin: top; }
         .strings::after { right: 10px; transform: rotate(35deg); transform-origin: top; }
-
         .cup { width: 130px; height: 55px; background: rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.4); border-radius: 0 0 70px 70px; display: flex; justify-content: center; align-items: center; }
         .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 12px; border-radius: 5px; font-size: 1.8rem; font-weight: bold; }
-
         .pivot-triangle { width: 0; height: 0; border-left: 30px solid transparent; border-right: 30px solid transparent; border-bottom: 160px solid rgba(255,255,255,0.15); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
-        .num-btn { 
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; 
-            font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.3s;
-        }
+        .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.3s; }
         .num-btn:hover:not(:disabled) { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); transform: scale(1.05); }
         .num-btn:disabled { opacity: 0.1; border-color: red; }
 
-        .turn-indicator { margin-top: 15px; font-size: 1.4rem; font-weight: bold; color: var(--neon-blue); }
+        #timer { transition: 0.3s; }
+        .timer-danger { color: #ff0000 !important; animation: blink 0.5s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
         #event-msg { display: none; position: fixed; top: 15%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); border: 2px solid var(--neon-blue); padding: 10px 30px; border-radius: 50px; z-index: 5000; font-weight: bold; }
     </style>
 </head>
@@ -103,11 +94,11 @@
     <div id="event-msg">حدث فجائي!</div>
 
     <div class="overlay" id="rules-box"><div class="content-box"><h2>📜 الشروط</h2><p>1. لا تكرر رقمك الأخير.<br>2. انتبه للوقت.</p><button onclick="toggleOverlay('rules-box')">موافق</button></div></div>
-    <div class="overlay" id="info-box"><div class="content-box"><h2>ℹ️ الأحداث</h2><p>🕳️ ثقب: خصم<br>☄️ نيزك: زيادة<br>🔋 شحن: وقت</p><button onclick="toggleOverlay('info-box')">فهمت</button></div></div>
+    <div class="overlay" id="info-box"><div class="content-box"><h2>ℹ️ الأحداث</h2><p>🕳️ ثقب: يخصم نقاط<br>☄️ نيزك: يزيد نقاط<br>🔋 شحن: يزيد وقت</p><button onclick="toggleOverlay('info-box')">فهمت</button></div></div>
 
     <div class="controls-top">
-        <button class="btn-ctrl" onclick="toggleOverlay('rules-box')">الشروط</button>
-        <button class="btn-ctrl" onclick="toggleOverlay('info-box')">الأحداث</button>
+        <button class="btn-ctrl" onclick="toggleOverlay('rules-box')">📜</button>
+        <button class="btn-ctrl" onclick="toggleOverlay('info-box')">ℹ️</button>
         <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan);">ابدأ ▶️</button>
         <button class="btn-ctrl" onclick="toggleAdmin()">⚙️</button>
     </div>
@@ -151,6 +142,9 @@
         <div class="turn-indicator" id="turn-txt">بانتظار البدء...</div>
     </div>
 
+    <audio id="sound-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+    <audio id="sound-boom" src="https://assets.mixkit.co/active_storage/sfx/147/147-preview.mp3"></audio>
+
     <script>
         let total=0, t1=0, t2=0, turn=1, max=0, timeLeft=0, timeLimit=0, timerId, isPaused=true, moves=0;
         let pV=0, mV=0, cV=0, evOn=true, lastT1=null, lastT2=null;
@@ -192,29 +186,56 @@
         function startTimer() {
             clearInterval(timerId); timeLeft = timeLeft > 0 ? timeLeft : timeLimit;
             document.getElementById('timer').innerText = timeLeft;
-            timerId = setInterval(() => { if(!isPaused) { timeLeft--; document.getElementById('timer').innerText = timeLeft; if(timeLeft <= 0) endGame(); } }, 1000);
+            timerId = setInterval(() => { 
+                if(!isPaused) { 
+                    timeLeft--; 
+                    document.getElementById('timer').innerText = timeLeft;
+                    if(timeLeft <= 0) endGame(); 
+                } 
+            }, 1000);
         }
 
         function play(v) {
-            if(isPaused) return; total += v; moves++;
+            if(isPaused) return;
+            document.getElementById('sound-click').play();
+            total += v; moves++;
             if(turn === 1) { t1 += v; lastT1 = v; turn = 2; updateBtns(lastT2); }
             else { t2 += v; lastT2 = v; turn = 1; updateBtns(lastT1); }
-            updateUI(); if(evOn && moves % 5 === 0) triggerEvent();
+            updateUI(); 
+            if(evOn && moves % 5 === 0) triggerEvent();
             if(total >= max) endGame(); else { timeLeft = timeLimit; startTimer(); }
         }
 
         function updateBtns(blocked) { for(let i=1; i<=10; i++) document.getElementById(`btn-${i}`).disabled = (i === blocked); }
 
         function triggerEvent() {
-            const evs = [`🕳️ ثقب: -${mV}`, `☄️ نيزك: +${pV}`, `🔋 شحن: +${cV}ث`][Math.floor(Math.random()*3)];
-            const m = document.getElementById('event-msg'); m.innerText = evs; m.style.display = 'block';
-            if(evs.includes('ثقب')) total = Math.max(0, total - mV); else if(evs.includes('نيازك')) total += pV; else if(evs.includes('شحن')) timeLeft += cV;
-            updateUI(); setTimeout(() => m.style.display = 'none', 3000);
+            const rIdx = Math.floor(Math.random()*3);
+            let msg = "";
+            if(rIdx === 0) { total = Math.max(0, total - mV); msg = `🕳️ ثقب: -${mV}`; }
+            else if(rIdx === 1) { total += pV; msg = `☄️ نيزك: +${pV}`; }
+            else { timeLeft += cV; msg = `🔋 شحن: +${cV}ث`; }
+            
+            const m = document.getElementById('event-msg'); 
+            m.innerText = msg; m.style.display = 'block';
+            updateUI(); 
+            setTimeout(() => m.style.display = 'none', 3000);
         }
 
         function updateUI() {
             document.getElementById('total-val').innerText = total;
             document.getElementById('s1').innerText = t1; document.getElementById('s2').innerText = t2;
+            
+            // تنبيه المنطقة الخطرة (باقي 10 نقاط أو أقل)
+            const card = document.getElementById('game-card');
+            const timerEl = document.getElementById('timer');
+            if(max - total <= 10 && max !== 0) {
+                card.classList.add('danger-zone');
+                timerEl.classList.add('timer-danger');
+            } else {
+                card.classList.remove('danger-zone');
+                timerEl.classList.remove('timer-danger');
+            }
+
             let angle = Math.max(-25, Math.min(25, (t1 - t2) * -1.8));
             document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
             document.getElementById('cont1').style.transform = `rotate(${-angle}deg)`;
@@ -223,9 +244,17 @@
             document.getElementById('turn-txt').innerText = isPaused ? "متوقف" : `دور: ${name}`;
         }
 
-        function endGame() { clearInterval(timerId); document.getElementById('wasted-screen').style.display = 'flex'; setTimeout(() => location.reload(), 3000); }
+        function endGame() { 
+            clearInterval(timerId); 
+            document.getElementById('sound-boom').play();
+            document.getElementById('wasted-screen').style.display = 'flex'; 
+            setTimeout(() => location.reload(), 3000); 
+        }
 
-        function reset() { total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null; timeLeft = timeLimit; updateUI(); updateBtns(null); }
+        function reset() { 
+            total=0; t1=0; t2=0; turn=1; moves=0; lastT1=null; lastT2=null; timeLeft = timeLimit; 
+            updateUI(); updateBtns(null); 
+        }
     </script>
 </body>
 </html>
