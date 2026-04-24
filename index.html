@@ -57,16 +57,15 @@
         }
         .main-card.paused { opacity: 0.3; pointer-events: none; }
 
-        /* الشعار والاسم */
-        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; }
+        /* الشعار وكلمة SOLAR بجانبه */
+        .logo-area { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px; flex-direction: row-reverse; }
         .logo-box { 
             width: 70px; height: 70px; 
             border: 2px solid #fff; 
             border-radius: 15px; 
             background: url('logo.png') center/cover no-repeat; 
-            /* تم حذف أي تعديلات لونية هنا ليبقى طبيعياً */
         }
-        .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
+        .logo-text { font-size: 3.5rem; font-weight: 900; letter-spacing: 8px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
         /* الميزان المرفوع */
         .balance-area { height: 220px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 80px; position: relative; }
@@ -137,7 +136,7 @@
     <div class="main-card paused" id="game-card">
         <div id="timer" style="font-size: 2.2rem; color: var(--danger); font-weight: bold;">0</div>
         <div class="logo-area">
-            <h1 class="logo-text">ميزان سولار</h1>
+            <h1 class="logo-text">SOLAR</h1>
             <div class="logo-box"></div>
         </div>
         <div style="margin-bottom: 10px;">المجموع الكلي: <span id="total-val">0</span></div>
