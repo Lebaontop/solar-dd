@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزان سولار - Solar Balance PRO</title>
+    <title>ميزان سولار - Solar Balance Fix</title>
     <style>
         :root {
             --glow-cyan: #4facfe;
@@ -21,7 +21,7 @@
             position: relative;
         }
 
-        /* تأثير النجوم المتحركة */
+        /* النجوم المتحركة */
         .stars-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: moveStar linear infinite, twinkle 2s ease-in-out infinite; }
         @keyframes moveStar { from { transform: translateY(0px); } to { transform: translateY(-1000px); } }
@@ -41,7 +41,7 @@
             padding: 35px; border-radius: 30px;
             width: 90%; max-width: 850px; text-align: center;
             position: relative; z-index: 2; box-shadow: 0 0 80px rgba(0, 0, 0, 0.6);
-            transition: opacity 0.3s, transform 0.1s;
+            transition: opacity 0.3s;
         }
         .main-card.paused { opacity: 0.4; pointer-events: none; }
 
@@ -49,36 +49,46 @@
         .logo-text { font-size: 3.5rem; font-weight: 900; letter-spacing: 10px; background: linear-gradient(135deg, var(--galaxy-start) 0%, var(--galaxy-mid) 50%, var(--galaxy-end) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
         .logo-img { width: 85px; height: 85px; border: 2px solid white; border-radius: 15px; background: url('logo.png') center/cover no-repeat; }
 
-        /* ميزان الصورة المحدث */
-        .balance-box { height: 160px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 60px; position: relative; }
+        /* ميزان ديناميكي */
+        .balance-box { height: 180px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 40px; position: relative; }
+        
+        /* الحامل الرئيسي الثابت */
+        .pivot-container { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; z-index: 1; }
+        .pivot-point { width: 16px; height: 16px; background: #fff; border-radius: 50%; margin-bottom: -8px; position: relative; z-index: 5; box-shadow: 0 0 10px white; }
+        .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 45px solid rgba(255,255,255,0.3); }
+
+        /* المسطرة المائلة */
         .new-beam { 
-            width: 460px; height: 6px; 
+            width: 480px; height: 6px; 
             background: linear-gradient(90deg, transparent, #fff, transparent); 
-            position: relative; transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: absolute; bottom: 45px; left: 50%;
+            margin-left: -240px; /* نصف العرض للسنترة */
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-origin: center center;
+            z-index: 4;
         }
+
+        /* الكفات (المربعات) */
         .basket { 
             width: 100px; height: 75px; 
             border: 2px solid white; background: rgba(0,0,0,0.7); 
-            position: absolute; bottom: -75px; border-radius: 8px; 
+            position: absolute; top: 10px; /* معلقة في المسطرة */
+            border-radius: 8px; 
             display: flex; flex-direction: column; justify-content: center;
+            /* هذي الحركة تخلي المربع دايم واقف سيده حتى لو المسطرة مالت */
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .basket-l { left: -50px; } .basket-r { right: -50px; }
-        .team-title { font-size: 0.75rem; margin-bottom: 5px; opacity: 0.8; }
-        .weight-txt { font-size: 1.8rem; font-weight: bold; }
+        .basket-l { left: -30px; } 
+        .basket-r { right: -30px; }
         
         .active-turn { border-color: var(--neon-blue); box-shadow: 0 0 20px var(--neon-blue); border-width: 3px; }
 
-        .pivot-container { position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
-        .pivot-point { width: 15px; height: 15px; background: #fff; border-radius: 50%; margin-bottom: -5px; z-index: 3; }
-        .pivot-triangle { width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 35px solid rgba(255,255,255,0.4); }
-
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-width: 550px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; max-width: 550px; margin: 20px auto 0; }
         .btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 18px; font-size: 1.3rem; font-weight: bold; border-radius: 10px; cursor: pointer; transition: 0.2s; }
         .btn:hover { background: var(--neon-blue); transform: translateY(-3px); }
 
         #timer-display { font-size: 2.5rem; color: #ff4b2b; font-weight: bold; margin-bottom: 5px; }
 
-        /* تأثيرات النهاية */
         .explosion-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 0, 0, 0); z-index: 100; pointer-events: none; transition: background 0.2s; }
         .shake { animation: shake-card 0.1s infinite; }
         @keyframes shake-card { 0% { transform: translate(3px, 3px); } 50% { transform: translate(-3px, -3px); } 100% { transform: translate(3px, -3px); } }
@@ -108,12 +118,12 @@
             <h1 class="logo-text">SOLAR</h1>
             <div class="logo-img"></div>
         </div>
-        <div style="font-size: 1.4rem; margin-bottom: 20px;">المجموع: <span id="total-val">0</span></div>
+        <div style="font-size: 1.4rem; margin-bottom: 10px;">المجموع: <span id="total-val">0</span></div>
         
         <div class="balance-box">
             <div class="new-beam" id="beam">
-                <div class="basket basket-l active-turn" id="b1"><small class="team-title" id="t1-name">فريق 1</small><b class="weight-txt" id="s1">0</b></div>
-                <div class="basket basket-r" id="b2"><small class="team-title" id="t2-name">فريق 2</small><b class="weight-txt" id="s2">0</b></div>
+                <div class="basket basket-l active-turn" id="b1"><small id="t1-name">فريق 1</small><b id="s1">0</b></div>
+                <div class="basket basket-r" id="b2"><small id="t2-name">فريق 2</small><b id="s2">0</b></div>
             </div>
             <div class="pivot-container">
                 <div class="pivot-point"></div>
@@ -167,6 +177,9 @@
 
         function startTimer() {
             clearInterval(timerId);
+            timeLeft = timeLimit; // تصفير الوقت عند بداية كل دور
+            document.getElementById('timer-display').innerText = timeLeft;
+            
             timerId = setInterval(() => {
                 if(!isPaused) {
                     timeLeft--;
@@ -190,6 +203,7 @@
             if(isPaused) return;
             document.getElementById('sound-click').play();
             total += v;
+            
             if(turn === 1) {
                 t1 += v; document.getElementById('s1').innerText = t1;
                 turn = 2; document.getElementById('b1').classList.remove('active-turn'); document.getElementById('b2').classList.add('active-turn');
@@ -199,11 +213,24 @@
                 turn = 1; document.getElementById('b2').classList.remove('active-turn'); document.getElementById('b1').classList.add('active-turn');
                 document.getElementById('active-team-txt').innerText = name1;
             }
-            document.getElementById('total-num').innerText = total;
-            document.getElementById('beam').style.transform = `rotate(${(t1 - t2) * -1.8}deg)`;
+            
+            document.getElementById('total-val').innerText = total;
+            
+            // حساب الميلان
+            let angle = (t1 - t2) * -1.8;
+            if (angle > 28) angle = 28; if (angle < -28) angle = -28;
+            
+            // تمييل المسطرة
+            document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
+            
+            // تعديل عكسي للكفات عشان تبقى سيده (vertical)
+            document.getElementById('b1').style.transform = `rotate(${-angle}deg)`;
+            document.getElementById('b2').style.transform = `rotate(${-angle}deg)`;
             
             if(total >= max) endGame("انفجر الميزان!");
-            else { timeLeft = timeLimit; document.getElementById('timer-display').innerText = timeLeft; }
+            else { 
+                startTimer(); // إعادة تشغيل العداد من الصفر للدور الجديد
+            }
         }
 
         function endGame(msg) {
@@ -225,6 +252,8 @@
             document.getElementById('total-val').innerText = "0";
             document.getElementById('s1').innerText = "0"; document.getElementById('s2').innerText = "0";
             document.getElementById('beam').style.transform = "rotate(0deg)";
+            document.getElementById('b1').style.transform = "rotate(0deg)";
+            document.getElementById('b2').style.transform = "rotate(0deg)";
             document.getElementById('timer-display').innerText = timeLeft;
             document.getElementById('active-team-txt').innerText = name1;
             document.getElementById('b1').classList.add('active-turn');
