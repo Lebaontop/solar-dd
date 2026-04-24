@@ -7,139 +7,191 @@
     <style>
         :root {
             --glow-cyan: #4facfe;
+            /* تأثير النيون للجالكسي */
+            --galaxy-start: #3a1c71; /* بنفسجي غامق */
+            --galaxy-mid: #d76d77;   /* وردي محمر */
+            --galaxy-end: #ffaf7b;   /* برتقالي ذهبي */
         }
 
         body {
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* لون احتياطي غامق في حال لم تظهر الخلفية */
-            background-color: #050510; 
-            /* استدعاء الخلفية بمسار مباشر */
-            background-image: url('bg.jpg'), url('bg.jpeg'), url('bg.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            /* استدعاء ملف الخلفية الخاص بك bg.jpd */
+            background: #050510 url('bg.jpd') center/cover no-repeat fixed;
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            position: relative;
         }
 
-        /* لوحة التحكم */
-        .admin-panel {
-            position: absolute; top: 20px; right: 20px;
-            background: rgba(0, 0, 0, 0.9); padding: 20px;
-            border-radius: 15px; border: 1px solid var(--glow-cyan);
-            z-index: 1000; width: 220px; transition: 0.3s;
+        /* طبقة تعتيم خفيفة جداً لبروز النص مع الحفاظ على الخلفية */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 0;
         }
-        .admin-panel.hidden { transform: translateX(250px); opacity: 0; pointer-events: none; }
 
         .toggle-admin {
             position: absolute; top: 20px; right: 20px;
             background: rgba(0,0,0,0.6); border: 1px solid white;
             color: white; padding: 8px 15px; border-radius: 8px;
-            cursor: pointer; z-index: 999;
+            cursor: pointer; z-index: 1000;
         }
 
+        /* لوحة التحكم */
+        .admin-panel {
+            position: absolute; top: 70px; right: 20px;
+            background: rgba(0, 0, 0, 0.9); padding: 20px;
+            border-radius: 15px; border: 1px solid var(--glow-cyan);
+            z-index: 1001; width: 220px; transition: 0.3s;
+        }
+        .admin-panel.hidden { transform: translateX(250px); opacity: 0; pointer-events: none; }
+        .admin-input-group input { width: 100%; margin-bottom: 10px; padding: 5px; background: #222; color: white; border: 1px solid #444; border-radius: 4px; }
+
+        /* اللوحة المركزية بـ "شفايفه" (شفافية ضبابية) فخمة */
         .main-card {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 30px; border-radius: 24px;
-            width: 90%; max-width: 800px; text-align: center;
+            /* زيادة الشفافية وتأثير الضباب */
+            background-color: rgba(255, 255, 255, 0.015); /* شفافية عالية جداً للمحتوى */
+            backdrop-filter: blur(25px) saturate(180%); /* تأثير ضبابي قوي ومنعش للألوان */
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1); /* إطار شفاف رفيع */
+            padding: 40px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 850px;
+            text-align: center;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.6);
+            position: relative;
+            z-index: 1;
         }
 
-        .header-area { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
-        .logo-text { font-size: 3rem; font-weight: 900; letter-spacing: 5px; color: #fff; text-shadow: 0 0 10px var(--glow-cyan); }
-        
-        /* حاوية الشعار */
-        .logo-container {
-            width: 80px; height: 80px;
-            border: 2px solid white; border-radius: 12px;
-            overflow: hidden; background: #111;
+        .header-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 30px;
         }
-        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* كلمة SOLAR بلون جالكسي متدرج (Gradient) */
+        .logo-text {
+            font-size: 3.8rem;
+            font-weight: 900;
+            letter-spacing: 12px;
+            background: linear-gradient(135deg, var(--galaxy-start) 0%, var(--galaxy-mid) 50%, var(--galaxy-end) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* إضافة توهج نيوني خفيف يعزز تأثير الجالكسي */
+            filter: drop-shadow(0 0 10px rgba(215, 109, 119, 0.5));
+            margin: 0;
+        }
+
+        /* استدعاء ملف الشعار الخاص بك logo.png */
+        .logo-img {
+            width: 90px;
+            height: 90px;
+            border: 2px solid white;
+            border-radius: 18px;
+            background: url('logo.png') center/cover no-repeat;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .score-display {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 30px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        #total-num { font-size: 2.8rem; color: #fff; text-shadow: 0 0 15px var(--glow-cyan); font-weight: bold; }
 
         /* الميزان */
-        .balance-box { height: 100px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 50px; }
-        .beam { width: 400px; height: 5px; background: white; position: relative; transition: transform 0.7s ease-out; }
-        .basket { 
-            width: 90px; height: 50px; border: 2px solid white; 
-            background: rgba(0,0,0,0.7); position: absolute; bottom: -50px; 
-            border-radius: 0 0 45px 45px; display: flex; flex-direction: column; justify-content: center; 
-        }
-        .basket-l { left: -45px; } .basket-r { right: -45px; }
+        .balance-box { height: 130px; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 70px; }
+        .beam { width: 480px; height: 6px; background: rgba(255, 255, 255, 0.6); position: relative; transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .basket { width: 110px; height: 65px; border: 2px solid rgba(255, 255, 255, 0.5); background: rgba(0, 0, 0, 0.7); position: absolute; bottom: -65px; border-radius: 0 0 60px 60px; display: flex; flex-direction: column; justify-content: center; }
+        .basket-l { left: -55px; } .basket-r { right: -55px; }
+        .team-label { font-size: 0.8rem; color: #ccc; }
 
-        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; }
-        .btn { 
-            background: rgba(255,255,255,0.1); border: 1px solid white; 
-            color: white; padding: 15px; font-size: 1.2rem; border-radius: 8px; cursor: pointer; 
+        /* الأزرار (مثل الجالكسي والزجاج) */
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; max-width: 600px; margin: 0 auto; }
+        .btn {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 20px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
         }
-        .btn:hover { background: var(--glow-cyan); }
+        .btn:hover { background: var(--glow-cyan); transform: translateY(-3px); box-shadow: 0 5px 20px var(--glow-cyan); border-color: transparent; }
+
+        #turn-info { margin-top: 30px; font-size: 1.3rem; color: #eee; }
+
+        .shake { animation: shake-anim 0.3s infinite; }
+        @keyframes shake-anim { 0% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -2px); } 100% { transform: translate(2px, -2px); } }
     </style>
 </head>
 <body>
 
     <button class="toggle-admin" onclick="toggleAdmin()">⚙️ الإعدادات</button>
 
-    <div class="admin-panel" id="admin-panel">
-        <input type="text" id="n1" placeholder="اسم الفريق 1" style="width:100%; margin-bottom:5px;">
-        <input type="text" id="n2" placeholder="اسم الفريق 2" style="width:100%; margin-bottom:5px;">
-        <input type="number" id="limit" placeholder="الحد" style="width:100%; margin-bottom:10px;">
-        <button onclick="apply()" style="width:100%; background:var(--glow-cyan); border:none; color:white; padding:10px; cursor:pointer;">حفظ</button>
+    <div class="admin-panel hidden" id="admin-panel">
+        <input type="text" id="n1" placeholder="اسم الفريق 1" value="الفريق 1">
+        <input type="text" id="n2" placeholder="اسم الفريق 2" value="الفريق 2">
+        <input type="number" id="limit" placeholder="الحد" value="80">
+        <button onclick="apply()" style="width:100%; background:var(--glow-cyan); border:none; color:white; padding:10px; cursor:pointer; font-weight:bold;">حفظ</button>
     </div>
 
-    <div class="main-card" id="card">
+    <div class="main-card" id="game-card">
         <div class="header-area">
             <h1 class="logo-text">SOLAR</h1>
-            <div class="logo-container">
-                <img src="logo.png" onerror="this.src='logo.jpg'; this.onerror=function(){this.src='logo.jpeg';};">
-            </div>
+            <div class="logo-img"></div>
         </div>
 
-        <div style="font-size: 2rem; margin-bottom: 20px;">المجموع: <span id="total">0</span></div>
+        <div class="score-display">المجموع: <span id="total-num">0</span></div>
 
         <div class="balance-box">
             <div class="beam" id="beam">
-                <div class="basket basket-l"><small id="ln1">الفريق 1</small><b id="s1">0</b></div>
-                <div class="basket basket-r"><small id="ln2">الفريق 2</small><b id="s2">0</b></div>
+                <div class="basket basket-l"><small class="team-label" id="lbl1">الفريق 1</small><b id="s1">0</b></div>
+                <div class="basket basket-r"><small class="team-label" id="lbl2">الفريق 2</small><b id="s2">0</b></div>
             </div>
         </div>
 
         <div class="grid">
-            <script>
-                for(let i=1; i<=10; i++) document.write(`<button class="btn" onclick="play(${i})">${i}</button>`);
-            </script>
+            <script>for(let i=1; i<=10; i++) document.write(`<button class="btn" onclick="play(${i})">${i}</button>`);</script>
         </div>
+
+        <div id="turn-info">دور: <span id="active-name">الفريق 1</span></div>
     </div>
 
     <script>
-        let total=0, t1=0, t2=0, turn=1, max=80;
+        let total=0, t1=0, t2=0, turn=1, max=80, name1="الفريق 1", name2="الفريق 2";
         function toggleAdmin() { document.getElementById('admin-panel').classList.toggle('hidden'); }
         function apply() {
+            name1 = document.getElementById('n1').value || "الفريق 1"; name2 = document.getElementById('n2').value || "الفريق 2";
             max = parseInt(document.getElementById('limit').value) || 80;
-            document.getElementById('ln1').innerText = document.getElementById('n1').value || "الفريق 1";
-            document.getElementById('ln2').innerText = document.getElementById('n2').value || "الفريق 2";
-            toggleAdmin(); reset();
+            document.getElementById('lbl1').innerText=name1; document.getElementById('lbl2').innerText=name2; toggleAdmin(); reset();
         }
         function play(v) {
-            total += v;
-            if(turn===1) { t1+=v; document.getElementById('s1').innerText=t1; turn=2; }
-            else { t2+=v; document.getElementById('s2').innerText=t2; turn=1; }
-            document.getElementById('total').innerText = total;
-            let angle = (t1-t2)*-2;
-            document.getElementById('beam').style.transform = `rotate(${angle}deg)`;
-            if(total >= max) { alert("انفجر الميزان!"); reset(); }
+            total+=v;
+            if(turn===1) { t1+=v; document.getElementById('s1').innerText=t1; turn=2; document.getElementById('active-name').innerText=name2; }
+            else { t2+=v; document.getElementById('s2').innerText=t2; turn=1; document.getElementById('active-name').innerText=name1; }
+            document.getElementById('total-num').innerText=total;
+            let angle=(t1-t2)*-1.5; document.getElementById('beam').style.transform=`rotate(${angle}deg)`;
+            if(total >= max) { document.getElementById('game-card').classList.add('shake'); setTimeout(() => { alert("انفجر الميزان!"); reset(); }, 300); }
         }
         function reset() {
-            total=0; t1=0; t2=0; turn=1;
-            document.getElementById('total').innerText="0";
-            document.getElementById('s1').innerText="0";
-            document.getElementById('s2').innerText="0";
-            document.getElementById('beam').style.transform="rotate(0deg)";
+            total=0; t1=0; t2=0; turn=1; document.getElementById('total-num').innerText="0"; document.getElementById('s1').innerText="0"; document.getElementById('s2').innerText="0";
+            document.getElementById('beam').style.transform="rotate(0deg)"; document.getElementById('game-card').classList.remove('shake'); document.getElementById('active-name').innerText=name1;
         }
     </script>
 </body>
