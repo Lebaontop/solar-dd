@@ -32,8 +32,28 @@
         }
         #wasted-screen h1 { font-size: 8rem; color: #ff0000; text-shadow: 0 0 20px #600; letter-spacing: 15px; transform: skewX(-10deg); }
 
+        /* اللوحات المنبثقة */
+        .overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 4000;
+            justify-content: center; align-items: center;
+        }
+        .content-box { background: rgba(20,20,40,0.95); padding: 30px; border-radius: 20px; border: 2px solid var(--glow-cyan); max-width: 400px; text-align: right; }
+
+        /* الأزرار العلوية - ثابتة وواضحة */
+        .controls-top { 
+            position: absolute; top: 60px; right: 20px; 
+            display: flex; gap: 10px; z-index: 1000; 
+        }
+        .btn-ctrl { 
+            background: rgba(0,0,0,0.6); border: 1.5px solid rgba(255,255,255,0.4); 
+            color: white; padding: 8px 15px; border-radius: 10px; 
+            cursor: pointer; transition: 0.3s; font-weight: bold;
+        }
+        .btn-ctrl:hover { border-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
+
         .admin-panel {
-            position: absolute; top: 100px; right: 20px; background: rgba(0,0,0,0.95);
+            position: absolute; top: 110px; right: 20px; background: rgba(0,0,0,0.95);
             padding: 15px; border-radius: 15px; border: 1px solid var(--neon-blue);
             z-index: 1001; width: 260px; max-height: 75vh; overflow-y: auto; transition: 0.3s;
         }
@@ -54,6 +74,7 @@
         .logo-box { width: 60px; height: 60px; border: 2px solid #fff; border-radius: 12px; background: url('logo.png') center/cover no-repeat; }
         .logo-text { font-size: 2.8rem; font-weight: 900; letter-spacing: 5px; background: var(--galaxy); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0; }
 
+        /* منطقة الميزان المرفوعة */
         .balance-area { height: 280px; position: relative; display: flex; justify-content: center; align-items: flex-end; margin-bottom: 40px; }
         .beam { width: 440px; height: 6px; background: #fff; position: absolute; bottom: 160px; transition: transform 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
         .basket-anchor { position: absolute; top: 0; display: flex; flex-direction: column; align-items: center; transition: transform 0.7s; }
@@ -65,9 +86,11 @@
         .score-box { background: rgba(0,0,0,0.5); border: 1px solid #fff; padding: 2px 10px; border-radius: 5px; font-size: 1.6rem; font-weight: bold; }
         .pivot-triangle { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 160px solid rgba(255,255,255,0.1); position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
 
+        /* الأزرار وتأثيرات التحديد */
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 500px; margin: 0 auto; position: relative; z-index: 10; }
         .num-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 15px; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: 0.3s; }
         .num-btn:hover:not(:disabled) { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); transform: scale(1.05); }
+        .num-btn:active { transform: scale(0.9); }
         .num-btn:disabled { opacity: 0.1; }
 
         .timer-danger { color: #ff0000 !important; animation: blink 0.5s infinite; }
@@ -81,9 +104,29 @@
     <div class="animated-bg"></div>
     <div id="event-msg">حدث فجائي!</div>
 
-    <div class="controls-top" style="position: absolute; top:20px; right:20px; display:flex; gap:10px; z-index:1000;">
-        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none; padding:8px 15px; color:white; border-radius:8px; cursor:pointer; font-weight:bold;">ابدأ ▶️</button>
-        <button class="btn-ctrl" onclick="toggleAdmin()" style="background:rgba(0,0,0,0.5); border:1px solid #fff; color:white; padding:8px 15px; border-radius:8px; cursor:pointer;">⚙️</button>
+    <div class="overlay" id="rules-box">
+        <div class="content-box">
+            <h2>📜 شروط اللعبة</h2>
+            <p>1. ممنوع تكرار نفس الرقم مرتين متتاليتين لنفس الفريق.</p>
+            <p>2. عند انتهاء الوقت، تظهر شاشة WASTED وتخسر الجولة.</p>
+            <button class="btn-ctrl" onclick="toggleOverlay('rules-box')" style="width:100%; background:var(--danger); margin-top:10px;">موافق</button>
+        </div>
+    </div>
+
+    <div class="overlay" id="info-box">
+        <div class="content-box">
+            <h2>ℹ️ شرح الأحداث</h2>
+            <p>🕳️ الثقب الأسود: يخصم من المجموع الحالي.</p>
+            <p>☄️ النيازك: تزيد المجموع الحالي.</p>
+            <button class="btn-ctrl" onclick="toggleOverlay('info-box')" style="width:100%; background:var(--glow-cyan); margin-top:10px;">فهمت</button>
+        </div>
+    </div>
+
+    <div class="controls-top">
+        <button class="btn-ctrl" onclick="toggleOverlay('rules-box')">📜 الشروط</button>
+        <button class="btn-ctrl" onclick="toggleOverlay('info-box')">ℹ️ الأحداث</button>
+        <button class="btn-ctrl" onclick="togglePause()" id="p-btn" style="background:var(--glow-cyan); border:none;">ابدأ ▶️</button>
+        <button class="btn-ctrl" onclick="toggleAdmin()">⚙️</button>
     </div>
 
     <div class="admin-panel hidden" id="admin">
@@ -95,7 +138,7 @@
         <label>تأثير منطقة الخطر؟</label><select id="danger-t"><option value="on">تشغيل</option><option value="off">إيقاف</option></select>
         <label>زيادة النيازك (+):</label><input type="number" id="plus-v">
         <label>نقص الثقب (-):</label><input type="number" id="minus-v">
-        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); padding:10px; color:white; border:none; cursor:pointer; font-weight:bold; margin-top:10px;">حفظ وتطبيق</button>
+        <button onclick="applySettings()" style="width:100%; background:var(--neon-blue); padding:10px; color:white; border:none; cursor:pointer; font-weight:bold; margin-top:10px; border-radius:8px;">حفظ</button>
     </div>
 
     <div class="main-card paused" id="game-card">
@@ -144,7 +187,9 @@
             }
         };
 
+        function toggleOverlay(id) { const el = document.getElementById(id); el.style.display = (el.style.display==='flex')?'none':'flex'; }
         function toggleAdmin() { document.getElementById('admin').classList.toggle('hidden'); }
+        
         function togglePause() {
             if(max <= 0) { alert("أدخل الإعدادات أولاً!"); return; }
             isPaused = !isPaused;
@@ -190,7 +235,7 @@
         function updateBtns(blocked) { for(let i=1; i<=10; i++) document.getElementById(`btn-${i}`).disabled = (i === blocked); }
 
         function triggerEvent() {
-            const r = Math.floor(Math.random()*2); // تم تعديلها لتختار بين حدثين فقط (0 أو 1)
+            const r = Math.floor(Math.random()*2);
             let msg = "";
             if(r === 0) { total = Math.max(0, total - mV); msg = `🕳️ ثقب: -${mV}`; }
             else { total += pV; msg = `☄️ نيزك: +${pV}`; }
